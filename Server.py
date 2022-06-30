@@ -21,8 +21,58 @@ class users:
         self.username = username
         self.password = password
         self.cardID = cardID
+
+class booked:
+    class checkInTime:
+        def __init__(self, date, month, year):
+            self.date = date
+            self.month = month
+            self.year = year
+    class checkOutTime:
+        def __init__(self, date, month, year):
+            self.date = date
+            self.month = month
+            self.year = year
+
+    def __init__(self, user, checkInTime, checkOutTime):
+        self.user = user
+        self.checkin = checkInTime
+        self.checkout = checkOutTime
+
+class rooms:
+    class singleRoom:
+        def __init__(self, price, description, empty, notEmpty, booked):
+            self.price = price
+            self.description = description
+            self.empty = empty
+            self.notEmpty = notEmpty
+            self.listBooked = list(booked)
+    class coupleRoom:
+        def __init__(self, price, description, empty, notEmpty, booked):
+            self.price = price
+            self.description = description
+            self.empty = empty
+            self.notEmpty = notEmpty
+            self.listBooked = list(booked)
+    class familyRoom:
+        def __init__(self, price, description, empty, notEmpty, booked):
+            self.price = price
+            self.description = description
+            self.empty = empty
+            self.notEmpty = notEmpty
+            self.listBooked = list(booked)
+    def __init__(self, singleRoom, coupleRoom, familyRoom):
+        self.single = list(singleRoom)
+        self.couple = list(coupleRoom)
+        self.family = list(familyRoom)
+class hotels:
+    def __init__(self, name, ID, rooms):
+        self.name = name
+        self.ID = ID
+        self.rooms = rooms
 class dataBase:
-    listUser = []
+    listUsers = []
+    listHotels = []
 
 ##### PROCESS FUNCTIONS #####
 def cls():
@@ -81,12 +131,18 @@ def saveDatabase(dataServer):
     print("Saving complete!")
 def loadDatabase(dataServer):
     print("Loading database...")
-    with open("data.json", "r") as readFile:
+    with open("usersdata.json", "r") as readFile:
         dataStr = json.load(readFile)
         for i in dataStr['users']:
-            dataServer.listUser.append(users(i['username'], i['password'], i['cardID']))
+            dataServer.listUsers.append(users(i['username'], i['password'], i['cardID']))
     print("Loading complete!")
-
+def showDatabase(dataServer):
+    print("Showing database...")
+    for i in dataServer.listUser:
+        print(i.username)
+        print(i.password)
+        print(i.cardID)
+    print("Loading complete!")
 ##### MAIN #####
 def main():
     dataServer = dataBase
