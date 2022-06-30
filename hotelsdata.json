@@ -1,0 +1,100 @@
+{
+   "hotels": [{
+      "name": "fivestar",
+      "ID": "1",
+      "rooms": {
+         "single": {
+            "price": "500000",
+            "description": "Room for 1 person",
+            "empty": "2",
+            "booked": "1",
+            "listBooked": [{
+               "checkIn": {
+                  "date": "1",
+                  "month": "7",
+                  "year": "2022"
+               },
+               "checkOut": {
+                  "date": "7",
+                  "month": "7",
+                  "year": "2022"
+               }
+            }]
+         },
+         "couple": {
+            "price": "800000",
+            "description": "Room for 2 people",
+            "empty": "2",
+            "booked": "1",
+            "listBooked": [{
+               "checkIn": {
+                  "date": "1",
+                  "month": "7",
+                  "year": "2022"
+               },
+               "checkOut": {
+                  "date": "7",
+                  "month": "7",
+                  "year": "2022"
+               }
+            }]
+         },
+         "family": {
+            "price": "1200000",
+            "description": "Room for 4 people",
+            "empty": "3",
+            "booked": "0",
+            "listBooked": ""
+         }
+      },
+   }
+   {
+      "name": "fourstar",
+      "ID": "1",
+      "rooms": {
+         "single": {
+            "price": "400000",
+            "description": "Room for 1 person",
+            "empty": "2",
+            "booked": "1",
+            "listBooked": [{
+               "checkIn": {
+                  "date": "1",
+                  "month": "7",
+                  "year": "2022"
+               },
+               "checkOut": {
+                  "date": "7",
+                  "month": "7",
+                  "year": "2022"
+               }
+            }]
+         },
+         "couple": {
+            "price": "600000",
+            "description": "Room for 2 people",
+            "empty": "2",
+            "booked": "1",
+            "listBooked": [{
+               "checkIn": {
+                  "date": "1",
+                  "month": "7",
+                  "year": "2022"
+               },
+               "checkOut": {
+                  "date": "7",
+                  "month": "7",
+                  "year": "2022"
+               }
+            }]
+         },
+         "family": {
+            "price": "800000",
+            "description": "Room for 4 people",
+            "empty": "3",
+            "booked": "0",
+            "listBooked": ""
+         }
+      }
+   }]
+}

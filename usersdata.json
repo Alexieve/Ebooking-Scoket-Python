@@ -1,0 +1,17 @@
+{
+   "users": [{
+      "username": "Quynh",
+      "password": "123",
+      "cardID": "0123456789"
+   },
+   {
+      "username": "Quann",
+      "password": "123",
+      "cardID": "1234567890"
+   },
+   {
+      "username": "Quyyy",
+      "password": "123",
+      "cardID": "2345678901"
+   }]
+}
