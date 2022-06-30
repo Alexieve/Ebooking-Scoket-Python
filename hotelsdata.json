@@ -27,6 +27,7 @@
             "empty": "2",
             "booked": "1",
             "listBooked": [{
+               "username": "Quynh",
                "checkIn": {
                   "date": "1",
                   "month": "7",
@@ -46,7 +47,7 @@
             "booked": "0",
             "listBooked": ""
          }
-      },
+      }
    }
    {
       "name": "fourstar",
@@ -58,6 +59,7 @@
             "empty": "2",
             "booked": "1",
             "listBooked": [{
+               "username": "Quann",
                "checkIn": {
                   "date": "1",
                   "month": "7",
