@@ -129,12 +129,23 @@ def saveDatabase(dataServer):
     with open('data.txt', 'w') as writeFile:
         json.dump(dataServer, writeFile)
     print("Saving complete!")
-def loadDatabase(dataServer):
-    print("Loading database...")
+def loadUsersData(dataServer):
+    print("Loading users data...")
     with open("usersdata.json", "r") as readFile:
         dataStr = json.load(readFile)
         for i in dataStr['users']:
             dataServer.listUsers.append(users(i['username'], i['password'], i['cardID']))
+    print("Loading complete!")
+def loadHotelsData(dataServer):
+    print("Loading hotels data...")
+    with open("hotelsdata.json", "r") as readFile:
+        dataStr = json.load(readFile)
+        for i in dataStr['hotels']:
+            dataServer.listHotels.append(hotels(i['name'], i['ID'], i['rooms']))
+        #     j = i['rooms']
+        #     singleRoom = j['single']
+        #     coupleRoom = j['couple']
+        #     familyRoom = j['family']
     print("Loading complete!")
 def showDatabase(dataServer):
     print("Showing database...")
@@ -146,7 +157,8 @@ def showDatabase(dataServer):
 ##### MAIN #####
 def main():
     dataServer = dataBase
-    loadDatabase(dataServer)
+    loadUsersData(dataServer)
+    loadHotelsData(dataServer)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         cls()
         print("Server is starting...")
