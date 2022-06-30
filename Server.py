@@ -117,7 +117,7 @@ def checkLogin(s, dataServer):
     username = recvMsg(s)
     password = recvMsg(s)
     showRecvData(username, password)
-    for i in dataServer.listUser:
+    for i in dataServer.listUsers:
         if (username == i.username and password == i.password):
             sendMsg(s, "True")
             print("Checking complete!")
