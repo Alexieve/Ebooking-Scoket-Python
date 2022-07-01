@@ -9,17 +9,9 @@
             "empty": "2",
             "booked": "1",
             "listBooked": [{
-				"username": "Nafta",
-               "checkIn": {
-                  "date": "1",
-                  "month": "7",
-                  "year": "2022"
-               },
-               "checkOut": {
-                  "date": "7",
-                  "month": "7",
-                  "year": "2022"
-               }
+               "username": "Quann",
+               "checkin": "01/07/2022",
+               "checkout": "07/07/2022"
             }]
          },
          "couple": {
@@ -29,16 +21,8 @@
             "booked": "1",
             "listBooked": [{
                "username": "Quynh",
-               "checkIn": {
-                  "date": "1",
-                  "month": "7",
-                  "year": "2022"
-               },
-               "checkOut": {
-                  "date": "7",
-                  "month": "7",
-                  "year": "2022"
-               }
+               "checkin": "01/07/2022",
+               "checkout": "07/07/2022"
             }]
          },
          "family": {
@@ -52,7 +36,7 @@
    },
    {
       "name": "fourstar",
-      "ID": "1",
+      "ID": "2",
       "rooms": {
          "single": {
             "price": "400000",
@@ -61,16 +45,8 @@
             "booked": "1",
             "listBooked": [{
                "username": "Quann",
-               "checkIn": {
-                  "date": "1",
-                  "month": "7",
-                  "year": "2022"
-               },
-               "checkOut": {
-                  "date": "7",
-                  "month": "7",
-                  "year": "2022"
-               }
+               "checkin": "01/07/2022",
+               "checkout": "07/07/2022"
             }]
          },
          "couple": {
@@ -79,17 +55,9 @@
             "empty": "2",
             "booked": "1",
             "listBooked": [{
-				"username": "Tr.Tin",
-               "checkIn": {
-                  "date": "1",
-                  "month": "7",
-                  "year": "2022"
-               },
-               "checkOut": {
-                  "date": "7",
-                  "month": "7",
-                  "year": "2022"
-               }
+               "username": "Quyyy",
+               "checkin": "01/07/2022",
+               "checkout": "07/07/2022"
             }]
          },
          "family": {
