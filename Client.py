@@ -63,7 +63,7 @@ def registerFunc(s): # BUG
 
         password = str(input("Password: "))
         if len(password) < 3:
-            print("Invalid password, try again!")
+            print("Password too short, try again!")
             waitForInput()
             continue
 
@@ -87,6 +87,72 @@ def registerFunc(s): # BUG
         sendMsg(s, cardID)
         waitForInput()
         break
+
+def ddmmyy(s):
+    dateArrive = str(input("Date arrive to hotel: (dd/mm/yyyy "))
+    sendMsg(s,dateArrive)
+    dateLeft = str(input("Date left to hotel: (dd/mm/yyyy "))
+    sendMsg(s,dateLeft)
+
+
+def searchingMenu(s):
+    sendMsg(s, '3')
+    cls()
+    print("Searching hotel:")
+    while True:
+        hotelName = str(input("Hotel name: "))
+        sendMsg(s, hotelName)
+        existHotel = recvMsg(s)
+        if existHotel == '0':
+            print("No such hotel for you ! Type again")
+            continue
+    ddmmyy(s)
+    cls()
+    print("Result after request:")
+    info = recvMsg(s)
+    print("Hotel name: ",info)
+    info = recvMsg(s)
+    if(info != 'NONE_INFO'):
+        print("Single: ")
+        print("Description: ",info)
+        info = recvMsg(s)
+        print("Price: ",info)
+    else: print("Singleroom now is not available")
+    info = recvMsg(s)
+    if (info != 'NONE_INFO'):
+        print("Double: ")
+        print("Description: ", info)
+        info = recvMsg(s)
+        print("Price: ", info)
+    else:
+        print("Singleroom now is not available")
+    info = recvMsg(s)
+    if (info != 'NONE_INFO'):
+        print("Single: ")
+        print("Description: ", info)
+        info = recvMsg(s)
+        print("Price: ", info)
+    else:
+        print("Singleroom now is not available")
+    print("Press ENTER to continue...")
+    waitForInput()
+
+def bookRoomMenu(s):
+    while True:
+        sendMsg(s, '4')
+        cls()
+        print("Booking hotel:")
+        hotelName = str(input("Hotel name: "))
+        sendMsg(s, hotelName)
+        existHotel = recvMsg(s)
+        if existHotel == '0':
+            print("No such hotel for you ! Type again")
+            continue
+    roomType = str(input("Room type: "))
+    sendMsg(s,roomType)
+    ddmmyy(s)
+
+
 def showMenu(s):
     while True:
         cls()
@@ -126,8 +192,10 @@ def startingFunc(s):
             waitForInput()
             continue
 
+
 ##### MAIN #####
 def main():
+    print("Connecting...")
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect(ADDR)
         cls()
@@ -136,6 +204,7 @@ def main():
         while True:
             if not startingFunc(s):
                 break
+
             showMenu(s)
         s.close()
 
