@@ -2,7 +2,6 @@ import socket
 import json
 import os
 import datetime
-import time
 
 IP = "127.0.0.1"
 PORT = 1234
@@ -75,7 +74,7 @@ def showRecvData(*list):
         print(i)
 def sendMsg(s, *listMsg):
     for i in listMsg:
-        s.sendall(i.encode(FORMAT))
+        s.sendall(bytes(i,FORMAT))
 def recvMsg(s):
     return s.recv(SIZE).decode(FORMAT)
 def checkExistAccount(dataServer, username):
@@ -113,7 +112,7 @@ def checkLogin(s, dataServer):
     username = recvMsg(s)
     password = recvMsg(s)
     showRecvData(username, password)
-    for i in dataServer.listUser:
+    for i in dataServer.listUsers:
         if (username == i.username and password == i.password):
             sendMsg(s, "True")
             print("Checking complete!")
@@ -152,42 +151,49 @@ def showHotelsData(dataServer):
         print(i.rooms['single']['price'])
     print("Loading complete!")
 
-def sendHotelsInfo(s,dataServer,hotelName,dateArrive,DateLeft):
+def sendHotelsInfo(s,dataServer,hotelName):
+    dateArrive = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
+    dateLeft = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
+    showRecvData(dateArrive,dateLeft)
     temp = 'single'
-    ok= 1
+    ok = 1
     for i in dataServer.listHotels:
         if(i.name == hotelName):
-            sendMsg(s,hotelName)
+            sendMsg(s,hotelName) ###Here
             while True:
-                dateBooked = i.rooms[temp]['listBooked']['checkin']
-                dateBookedLeft = i.rooms[temp]['listBooked']['checkout']
-                if(DateLeft < dateBooked or dateArrive > dateBookedLeft or int(i.rooms[temp]['empty']) > 0):
-                    sendMsg(s,i.rooms[temp]['description'])
-                    sendMsg(s,i.rooms[temp]['price'])
-                else sendMsg(s,'NONE_INFO')
-                if(ok ==1):
-                    temp='double'
+                for j in i.rooms[temp]['listBooked']:
+                    dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
+                    dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
+                if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i.rooms[temp]['empty']) > 0):
+                    sendMsg(s, i.rooms[temp]['description'], i.rooms[temp]['price'])
+                    # sendMsg(s,i.rooms[temp]['description'])  ###Here
+                    # sendMsg(s,i.rooms[temp]['price'])       ###Here
+                else :sendMsg(s, 'NONE_INFO')
+                if(ok == 1):
+                    temp='couple'
                     ok = 2
                     continue
-                if(ok ==2):
+                if(ok == 2):
                     temp = 'family'
                     ok = 3
                     continue
-                if(ok == 3):break
+                if(ok == 3):
+                    break
+
 
 def findHotel(s,dataServer):
     print("Listening hotel's request from client")
-    hotelName = recvMsg(s)
-    showRecvData(hotelName)
-    exist = checkExistHotel(dataServer, hotelName)
-    if exist == "False":
-        print("No such hotel match the search")
-        sendMsg(s,'0')
+    while True:
+        hotelName = recvMsg(s)
+        showRecvData(hotelName)
+        exist = checkExistHotel(dataServer, hotelName)
+        if exist == False:
+            print("No such hotel match the search")
+            sendMsg(s,'0')
+            continue
+        else:break
     sendMsg(s,'1')
-    dateArrive = recvMsg(s)
-    dateLeft = recvMsg(s)
-    showRecvData(dateArrive,dateLeft)
-    sendHotelsInfo(s, dataServer,hotelName,dateArrive,dateLeft)
+    sendHotelsInfo(s, dataServer,hotelName)
 
 
 def bookingHotel(s,dataServer):
@@ -215,7 +221,7 @@ def main():
         print(f"Server is hosting on {IP}:{PORT}")
         s.listen()
         print("Waiting for connected...")
-        name='fivestar'
+        namee='fivestar'
         conn, addr = s.accept()
         with conn:
             print(f"Connected by {addr}")
