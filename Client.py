@@ -1,10 +1,11 @@
 import socket
 import os
+import datetime
 
 IP = "127.0.0.1"
 PORT = 1234
 ADDR = (IP, PORT)
-FORMAT = 'utf-8'
+FORMAT = "utf-8"
 SIZE = 1024
 
 ##### PROCESS FUNCTIONS #####
@@ -14,7 +15,7 @@ def waitForInput():
     input("Press ENTER to continue...")
 def sendMsg(s, *listMsg):
     for i in listMsg:
-        s.sendall(i.encode(FORMAT))
+        s.sendall(bytes(i, FORMAT))
 def recvMsg(s):
     return s.recv(SIZE).decode(FORMAT)
 
@@ -89,11 +90,9 @@ def registerFunc(s): # BUG
         break
 
 def ddmmyy(s):
-    dateArrive = str(input("Date arrive to hotel: (dd/mm/yyyy "))
-    sendMsg(s,dateArrive)
-    dateLeft = str(input("Date left to hotel: (dd/mm/yyyy "))
-    sendMsg(s,dateLeft)
-
+    dateArrive = str(input("Date arrive to hotel: (dd/mmyyy): "))
+    dateLeft = str(input("Date left to hotel: (dd/mm/yy): "))
+    sendMsg(s,dateArrive, dateLeft)
 
 def searchingMenu(s):
     sendMsg(s, '3')
@@ -106,17 +105,16 @@ def searchingMenu(s):
         if existHotel == '0':
             print("No such hotel for you ! Type again")
             continue
+        if existHotel == '1':break
     ddmmyy(s)
     cls()
-    print("Result after request:")
-    info = recvMsg(s)
-    print("Hotel name: ",info)
+    print("Result after request:") #voice call ? :)
+    print("Hotel name: ",recvMsg(s))
     info = recvMsg(s)
     if(info != 'NONE_INFO'):
         print("Single: ")
         print("Description: ",info)
-        info = recvMsg(s)
-        print("Price: ",info)
+        print("Price: ",recvMsg(s))
     else: print("Singleroom now is not available")
     info = recvMsg(s)
     if (info != 'NONE_INFO'):
@@ -125,15 +123,15 @@ def searchingMenu(s):
         info = recvMsg(s)
         print("Price: ", info)
     else:
-        print("Singleroom now is not available")
+        print("Doubleroom now is not available")
     info = recvMsg(s)
     if (info != 'NONE_INFO'):
-        print("Single: ")
+        print("Family: ")
         print("Description: ", info)
         info = recvMsg(s)
         print("Price: ", info)
     else:
-        print("Singleroom now is not available")
+        print("Family now is not available")
     print("Press ENTER to continue...")
     waitForInput()
 
