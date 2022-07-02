@@ -10,8 +10,8 @@
             "booked": "1",
             "listBooked": [{
                "username": "Quann",
-               "checkin": "01/07/2022",
-               "checkout": "07/07/2022"
+               "checkin": "01/07/22",
+               "checkout": "07/07/22"
             }]
          },
          "couple": {
@@ -21,8 +21,8 @@
             "booked": "1",
             "listBooked": [{
                "username": "Quynh",
-               "checkin": "01/07/2022",
-               "checkout": "07/07/2022"
+               "checkin": "01/07/22",
+               "checkout": "07/07/22"
             }]
          },
          "family": {
@@ -45,8 +45,8 @@
             "booked": "1",
             "listBooked": [{
                "username": "Quann",
-               "checkin": "01/07/2022",
-               "checkout": "07/07/2022"
+               "checkin": "01/07/22",
+               "checkout": "07/07/22"
             }]
          },
          "couple": {
@@ -56,8 +56,8 @@
             "booked": "1",
             "listBooked": [{
                "username": "Quyyy",
-               "checkin": "01/07/2022",
-               "checkout": "07/07/2022"
+               "checkin": "01/07/22",
+               "checkout": "07/07/22"
             }]
          },
          "family": {
