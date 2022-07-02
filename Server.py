@@ -6,7 +6,7 @@ import datetime
 IP = "127.0.0.1"
 PORT = 1234
 ADDR = (IP, PORT)
-FORMAT = 'utf-8'
+FORMAT = "utf-8"
 SIZE = 1024
 
 ###### Processing code #####
@@ -28,192 +28,178 @@ class _booked:
         self.user = user
         self.checkin = checkin
         self.checkout = checkout
-class rooms:
-    class singleRoom:
-        def __init__(self, price, description, empty, notEmpty, booked):
-            self.price = price
-            self.description = description
-            self.empty = empty
-            self.notEmpty = notEmpty
-            self.listBooked = [booked]
-    class coupleRoom:
-        def __init__(self, price, description, empty, notEmpty, booked):
-            self.price = price
-            self.description = description
-            self.empty = empty
-            self.notEmpty = notEmpty
-            self.listBooked = list(booked)
-    class familyRoom:
-        def __init__(self, price, description, empty, notEmpty, booked):
-            self.price = price
-            self.description = description
-            self.empty = empty
-            self.notEmpty = notEmpty
-            self.listBooked = list(booked)
-    def __init__(self, singleRoom, coupleRoom, familyRoom):
-        self.single = list(singleRoom)
-        self.couple = list(coupleRoom)
-        self.family = list(familyRoom)
-class hotels:
-    def __init__(self, name, ID, rooms):
-        self.name = name
-        self.ID = ID
-        self.rooms = rooms
-class dataBase:
-    listUsers = []
-    listHotels = []
 
 ##### PROCESS FUNCTIONS #####
 def cls():
     os.system('cls')
+
 def waitForInput():
     input("Press ENTER to continue...")
+
 def showRecvData(*list):
     print("From client:")
     for i in list:
         print(i)
+
 def sendMsg(s, *listMsg):
     for i in listMsg:
-        s.sendall(bytes(i,FORMAT))
+        s.sendall(bytes(i, FORMAT))
+
 def recvMsg(s):
     return s.recv(SIZE).decode(FORMAT)
-def checkExistAccount(dataServer, username):
-    for i in dataServer.listUser:
-        if (i.username == username):
+
+def checkExistAccount(serverData, username):
+    for i in serverData[0]['users']:
+        if (i['username'] == username):
             return True
     return False
 
-def checkExistHotel(dataserver,hotelName):
-    for i in dataserver.listHotels:
-        if (i.name == hotelName):
+def checkExistHotel(serverData, hotelName):
+    for i in serverData[1]['hotels']:
+        if (i['name'] == hotelName):
             return True
     return False
+
+def encoderUser(user):
+    if isinstance(user, users):
+        return {'username': user.username, 'password': user.password, 'cardID': user.cardID}
+    raise TypeError(f'Object {user} is not of type users.')
 
 ### MAIN FUNCTIONS ###
-def addAccount(s, dataServer): #BUG
+def addAccount(s, serverData):
     print("Adding account to database...")
     while True:
-        username = recvMsg(s)
+        username = str(recvMsg(s))
         showRecvData(username)
-        exits = checkExistAccount(dataServer, username)
-        if (exits == True):
+        exits = checkExistAccount(serverData, username)
+        if (exits):
             print("Account exist!")
             sendMsg(s, "True")
             continue
+        else:
+            print("Valid account!")
+            sendMsg(s, "False")
         password = recvMsg(s)
         cardID = recvMsg(s)
         showRecvData(password, cardID)
-        dataServer.listUser.append(users(username, password, cardID))
-        saveDatabase(dataServer)
-    print("Adding account complete!")
+        with open("usersdata.json") as file:
+            data = json.load(file)
+            tmp = data["users"]
+            user = users(username, password, cardID)
+            usertmp = {'username': user.username, 'password': user.password, 'cardID': user.cardID}
+            tmp.append(usertmp)
+        serverData[0] = data
+        saveUsersData(serverData[0])
+        print("Adding account complete!")
+        return
 
-def checkLogin(s, dataServer):
+def checkLogin(s, serverData):
     print("Checking login of client...")
     username = recvMsg(s)
     password = recvMsg(s)
     showRecvData(username, password)
-    for i in dataServer.listUsers:
-        if (username == i.username and password == i.password):
+    for i in serverData[0]['users']:
+        if (username == i['username'] and password == i['password']):
             sendMsg(s, "True")
             print("Checking complete!")
             return
     sendMsg(s, "False")
     print("Checking complete!")
-def saveDatabase(dataServer):
-    print("Saving database...")
-    with open('data.txt', 'w') as writeFile:
-        json.dump(dataServer, writeFile)
+
+def saveUsersData(usersData):
+    print("Saving users data...")
+    with open("usersdata.json", 'w') as writeFile:
+        json.dump(usersData, writeFile, indent=4)
     print("Saving complete!")
-def loadUsersData(dataServer):
+
+def saveHotelsData(hotelsData):
+    print("Saving hotels data...")
+    with open("hotelsdata.json", 'w') as writeFile:
+        json.dump(hotelsData, writeFile, indent=4)
+    print("Saving complete!")
+
+def loadUsersData():
     print("Loading users data...")
     with open("usersdata.json", "r") as readFile:
-        dataStr = json.load(readFile)
-        for i in dataStr['users']:
-            dataServer.listUsers.append(users(i['username'], i['password'], i['cardID']))
+        usersData = json.load(readFile)
     print("Loading complete!")
-def loadHotelsData(dataServer):
+    return usersData
+
+def loadHotelsData():
     print("Loading hotels data...")
     with open("hotelsdata.json", "r") as readFile:
-        dataStr = json.load(readFile)
-        for i in dataStr['hotels']:
-            dataServer.listHotels.append(hotels(i['name'], i['ID'], i['rooms']))
+        hotelsData = json.load(readFile)
     print("Loading complete!")
-def showUsersData(dataServer):
-    print("Showing users data...")
-    for i in dataServer.listUsers:
-        print(i.username)
-        print(i.password)
-        print(i.cardID)
-    print("Loading complete!")
-def showHotelsData(dataServer):
-    print("Showing hotels data...")
-    for i in dataServer.listHotels:
-        print(i.rooms['single']['price'])
-    print("Loading complete!")
+    return hotelsData
 
-def sendHotelsInfo(s,dataServer,hotelName):
+def sendHotelsInfo(s,serverData, hotelName):
     dateArrive = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
     dateLeft = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
-    showRecvData(dateArrive,dateLeft)
+    showRecvData(dateArrive, dateLeft)
     temp = 'single'
     ok = 1
-    for i in dataServer.listHotels:
-        if(i.name == hotelName):
-            sendMsg(s,hotelName) ###Here
-            while True:
-                for j in i.rooms[temp]['listBooked']:
-                    dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
-                    dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
-                if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i.rooms[temp]['empty']) > 0):
-                    sendMsg(s, i.rooms[temp]['description'], i.rooms[temp]['price'])
-                    # sendMsg(s,i.rooms[temp]['description'])  ###Here
-                    # sendMsg(s,i.rooms[temp]['price'])       ###Here
-                else :sendMsg(s, 'NONE_INFO')
-                if(ok == 1):
-                    temp='couple'
-                    ok = 2
-                    continue
-                if(ok == 2):
-                    temp = 'family'
-                    ok = 3
-                    continue
-                if(ok == 3):
-                    break
+    sendMsg(s, '341241', 'dsfsdf')
+    # sendMsg(s, "12345")
+    # for i in serverData[1]['hotels']:
+    #     if(i['name'] == hotelName):
+    #         while True:
+    #             empty = False
+    #             haveBooked = False
+    #             for j in i['rooms'][temp]['listBooked']:
+    #                 haveBooked = True
+    #                 dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
+    #                 dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
+    #                 if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i['rooms'][temp]['empty']) > 0):
+    #                     print("des------", i['rooms'][temp]['description'])
+    #                     print("pri------", i['rooms'][temp]['price'])
+    #                     sendMsg(s, i['rooms'][temp]['description'], i['rooms'][temp]['price']) #Here
+    #                     empty = True
+    #                     break
+    #             if not empty and haveBooked:
+    #                 sendMsg(s, "NONE_INFO", "NONE_INFO")
+    #             if not haveBooked:
+    #                 print("des------", i['rooms'][temp]['description'])
+    #                 print("pri------", i['rooms'][temp]['price'])
+    #                 sendMsg(s, i['rooms'][temp]['description'], i['rooms'][temp]['price'])
+    #             if ok == 1:
+    #                 temp = "couple"
+    #                 ok = 2
+    #             elif ok == 2:
+    #                 temp = "family"
+    #                 ok = 3
+    #             elif ok == 3: break
+    #         break
 
-
-def findHotel(s,dataServer):
+def findHotel(s,serverData):
     print("Listening hotel's request from client")
     while True:
         hotelName = recvMsg(s)
         showRecvData(hotelName)
-        exist = checkExistHotel(dataServer, hotelName)
+        exist = checkExistHotel(serverData, hotelName)
         if exist == False:
             print("No such hotel match the search")
-            sendMsg(s,'0')
+            sendMsg(s, "False")
             continue
-        else:break
-    sendMsg(s,'1')
-    sendHotelsInfo(s, dataServer,hotelName)
+        print("Valid hotels")
+        sendMsg(s, "True")
+        sendHotelsInfo(s, serverData, hotelName)
 
-
-def bookingHotel(s,dataServer):
+def bookingHotel(s,serverData):
     print("Listening hotel to book from client")
     hotelName = recvMsg(s)
     showRecvData(hotelName)
-    exist = checkExistHotel(dataServer, hotelName)
+    exist = checkExistHotel(serverData, hotelName)
     if exist == True:
         print("No such hotel match the search")
         sendMsg(s, '0')
     sendMsg(s, '1')
 
-
-
 ##### MAIN #####
 def main():
-    dataServer = dataBase
-    loadUsersData(dataServer)
-    loadHotelsData(dataServer)
-    # showHotelsData(dataServer)
+    # serverData = dataBase
+    usersData = loadUsersData()
+    hotelsData = loadHotelsData()
+    serverData = [usersData, hotelsData]
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         cls()
         print("Server is starting...")
@@ -221,7 +207,6 @@ def main():
         print(f"Server is hosting on {IP}:{PORT}")
         s.listen()
         print("Waiting for connected...")
-        namee='fivestar'
         conn, addr = s.accept()
         with conn:
             print(f"Connected by {addr}")
@@ -230,10 +215,10 @@ def main():
                 if prosCode == '0':
                     print("Client disconnected!")
                     break
-                elif prosCode == '1': checkLogin(conn, dataServer)
-                elif prosCode == '2': addAccount(conn, dataServer)
-                elif prosCode == '3': findHotel(conn,dataServer)
-                elif prosCode == '4': bookingHotel(conn,dataServer)
+                elif prosCode == '1': checkLogin(conn, serverData)
+                elif prosCode == '2': addAccount(conn, serverData)
+                elif prosCode == '3': findHotel(conn, serverData)
+                elif prosCode == '4': bookingHotel(conn, serverData)
         s.close()
 
 main()

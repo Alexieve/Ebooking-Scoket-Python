@@ -34,27 +34,39 @@ def loginFunc(s):
         print("Login success!")
     waitForInput()
     return check
-def registerFunc(s): # BUG
+
+def registerFunc(s):
+    def checkValidUsername(username):
+        if len(username) < 5:
+            return False
+        for i in username:
+            if ('A' <= i and i <= 'Z') or ('a' <= i and i <= 'z') or ('0' <= i and i <= '9'):
+                continue
+            else:
+                return False
+        return True
+    def checkValidPassword(password):
+        if len(password) < 3:
+            return False
+        return True
+    def checkValidCardID(cardID):
+        if len(cardID) != 10:
+            return False
+        for i in cardID:
+            if i < '0' or '9' < i:
+                return False
+        return True
+
     sendMsg(s, '2')
     while True:
         cls()
         print(">>>REGISTER<<<")
         username = str(input("Username: "))
-        if len(username) < 5:
+        if not checkValidUsername(username):
             print("Invalid username, try again!")
             waitForInput()
             continue
-        check = False
-        for i in username:
-            if (i >= 'A' and i <= 'Z') or (i >= 'a' and i <= 'z') or (i>= '0' and i <= '9'):
-                continue
-            else:
-                print("Invalid username, try again!")
-                waitForInput()
-                check = True
-                break
-        if check:
-            continue
+
         sendMsg(s, username)
         exits = recvMsg(s)
         if exits == "True":
@@ -63,36 +75,26 @@ def registerFunc(s): # BUG
             continue
 
         password = str(input("Password: "))
-        if len(password) < 3:
-            print("Password too short, try again!")
+        if not checkValidPassword(password):
+            print("Invalid password, try again!")
             waitForInput()
             continue
 
         cardID = str(input("Card ID: "))
-        if len(cardID) != 10:
+        if not checkValidCardID(cardID):
             print("Invalid card ID, try again!")
             waitForInput()
             continue
-        check = False
-        for i in cardID:
-            if i < '0' or i > '9':
-                print("Invalid card ID, try again!")
-                waitForInput()
-                check = True
-                break
-        if check:
-            continue
 
         print("Registation complete!")
-        sendMsg(s, password)
-        sendMsg(s, cardID)
+        sendMsg(s, password, cardID)
         waitForInput()
-        break
+        return
 
 def ddmmyy(s):
-    dateArrive = str(input("Date arrive to hotel: (dd/mmyyy): "))
+    dateArrive = str(input("Date arrive to hotel: (dd/mm/yy): "))
     dateLeft = str(input("Date left to hotel: (dd/mm/yy): "))
-    sendMsg(s,dateArrive, dateLeft)
+    sendMsg(s, dateArrive, dateLeft)
 
 def searchingMenu(s):
     sendMsg(s, '3')
@@ -102,37 +104,45 @@ def searchingMenu(s):
         hotelName = str(input("Hotel name: "))
         sendMsg(s, hotelName)
         existHotel = recvMsg(s)
-        if existHotel == '0':
+        if existHotel == "False":
             print("No such hotel for you ! Type again")
             continue
-        if existHotel == '1':break
+        break
+
     ddmmyy(s)
     cls()
-    print("Result after request:") #voice call ? :)
-    print("Hotel name: ",recvMsg(s))
-    info = recvMsg(s)
-    if(info != 'NONE_INFO'):
-        print("Single: ")
-        print("Description: ",info)
-        print("Price: ",recvMsg(s))
-    else: print("Singleroom now is not available")
-    info = recvMsg(s)
-    if (info != 'NONE_INFO'):
-        print("Double: ")
-        print("Description: ", info)
-        info = recvMsg(s)
-        print("Price: ", info)
-    else:
-        print("Doubleroom now is not available")
-    info = recvMsg(s)
-    if (info != 'NONE_INFO'):
-        print("Family: ")
-        print("Description: ", info)
-        info = recvMsg(s)
-        print("Price: ", info)
-    else:
-        print("Family now is not available")
-    print("Press ENTER to continue...")
+    print("Result after request:")
+    print("Hotel name: ", hotelName)
+
+    info1 = recvMsg(s)
+    print(info1)
+    # info2 = recvMsg(s)
+    # print(info2)
+    # if(info != "NONE_INFO"):
+    #     print("Single: ")
+    #     print("Description: ", info1)
+    #     print("Price: ", info2)
+    # else:
+    #     print("Single room now is not available")
+    #
+    # info1 = recvMsg(s)
+    # info2 = recvMsg(s)
+    # if (info != "NONE_INFO"):
+    #     print("Single: ")
+    #     print("Description: ", info1)
+    #     print("Price: ", info2)
+    # else:
+    #     print("Couple room now is not available")
+    #
+    # info1 = recvMsg(s)
+    # info2 = recvMsg(s)
+    # if (info != "NONE_INFO"):
+    #     print("Single: ")
+    #     print("Description: ", info1)
+    #     print("Price: ", info2)
+    # else:
+    #     print("Family room now is not available")
+
     waitForInput()
 
 def bookRoomMenu(s):
@@ -147,9 +157,8 @@ def bookRoomMenu(s):
             print("No such hotel for you ! Type again")
             continue
     roomType = str(input("Room type: "))
-    sendMsg(s,roomType)
+    sendMsg(s, roomType)
     ddmmyy(s)
-
 
 def showMenu(s):
     while True:
@@ -168,6 +177,7 @@ def showMenu(s):
             print("Invalid input, please try again!")
             waitForInput()
             continue
+
 def startingFunc(s):
     while True:
         cls()
@@ -183,13 +193,12 @@ def startingFunc(s):
             registerFunc(s)
         elif choice == '0':
             print("Goodbye!")
-            s.send(b'0')
+            sendMsg(s, '0')
             return False
         else:
             print("Invalid input, please try again!")
             waitForInput()
             continue
-
 
 ##### MAIN #####
 def main():
@@ -202,7 +211,6 @@ def main():
         while True:
             if not startingFunc(s):
                 break
-
             showMenu(s)
         s.close()
 

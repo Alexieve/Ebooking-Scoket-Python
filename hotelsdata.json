@@ -30,7 +30,7 @@
             "description": "Room for 4 people",
             "empty": "3",
             "booked": "0",
-            "listBooked": ""
+            "listBooked": []
          }
       }
    },
@@ -65,7 +65,7 @@
             "description": "Room for 4 people",
             "empty": "3",
             "booked": "0",
-            "listBooked": ""
+            "listBooked": []
          }
       }
    }]
