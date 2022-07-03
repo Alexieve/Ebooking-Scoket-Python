@@ -11,13 +11,14 @@ SIZE = 1024
 ##### PROCESS FUNCTIONS #####
 def cls():
     os.system('cls')
+
 def waitForInput():
     input("Press ENTER to continue...")
 
 def sendMsg(s, *listMsg):
     for i in listMsg:
         s.sendall(bytes(i, FORMAT))
-        
+
 def recvMsg(s):
     return s.recv(SIZE).decode(FORMAT)
 
@@ -47,10 +48,12 @@ def registerFunc(s):
             else:
                 return False
         return True
+
     def checkValidPassword(password):
         if len(password) < 3:
             return False
         return True
+
     def checkValidCardID(cardID):
         if len(cardID) != 10:
             return False
@@ -98,18 +101,18 @@ def ddmmyy(s):
     dateLeft = str(input("Date left to hotel: (dd/mm/yy): "))
     sendMsg(s, dateArrive, dateLeft)
 
-def hotelsInfo(s):
+def hotelsInfo(s, hotelName):
     cls()
     print("Result after request:")
-    print("Hotel name: ", hotelName)
+    print("Hotel name:", hotelName)
 
     info1 = recvMsg(s)
     sendMsg(s, "CheckRecv")
     info2 = recvMsg(s)
     if (info1 != "NONE_INFO"):
-        print("Single: ")
-        print("Description: ", info1)
-        print("Price: ", info2)
+        print("Single:")
+        print("Description:", info1)
+        print("Price:", info2)
     else:
         print("Single room now is not available")
 
@@ -117,9 +120,9 @@ def hotelsInfo(s):
     sendMsg(s, "CheckRecv")
     info2 = recvMsg(s)
     if (info1 != "NONE_INFO"):
-        print("Single: ")
-        print("Description: ", info1)
-        print("Price: ", info2)
+        print("Single:")
+        print("Description:", info1)
+        print("Price:", info2)
     else:
         print("Couple room now is not available")
 
@@ -127,9 +130,9 @@ def hotelsInfo(s):
     sendMsg(s, "CheckRecv")
     info2 = recvMsg(s)
     if (info1 != "NONE_INFO"):
-        print("Single: ")
-        print("Description: ", info1)
-        print("Price: ", info2)
+        print("Single:")
+        print("Description:", info1)
+        print("Price:", info2)
     else:
         print("Family room now is not available")
     waitForInput()
@@ -147,7 +150,7 @@ def searchingMenu(s):
             continue
         break
     ddmmyy(s)
-    hotelsInfo(s)
+    hotelsInfo(s, hotelName)
 
 def bookRoomMenu(s):
     while True:

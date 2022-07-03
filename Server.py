@@ -17,17 +17,18 @@ SIZE = 1024
 # 4 Booking Hotels
 
 ##### CLASS #####
+class booked:
+    user: str
+    id: str
+    checkin: str
+    checkout: str
+
 class users:
     def __init__(self, username, password, cardID):
         self.username = username
         self.password = password
         self.cardID = cardID
-
-class _booked:
-    def __init__(self, user, checkin, checkout):
-        self.user = user
-        self.checkin = checkin
-        self.checkout = checkout
+        self.listBooked = []
 
 ##### PROCESS FUNCTIONS #####
 def cls():
@@ -86,7 +87,7 @@ def addAccount(s, serverData):
             data = json.load(file)
             tmp = data["users"]
             user = users(username, password, cardID)
-            usertmp = {'username': user.username, 'password': user.password, 'cardID': user.cardID}
+            usertmp = {'username': user.username, 'password': user.password, 'cardID': user.cardID, 'listBooked': user.listBooked}
             tmp.append(usertmp)
         serverData[0] = data
         saveUsersData(serverData[0])
@@ -221,5 +222,6 @@ def main():
                 elif prosCode == '3': findHotel(conn, serverData)
                 elif prosCode == '4': bookingHotel(conn, serverData)
         s.close()
+
 
 main()

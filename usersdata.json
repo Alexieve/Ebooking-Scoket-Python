@@ -3,17 +3,41 @@
         {
             "username": "Quynh",
             "password": "123",
-            "cardID": "0123456789"
+            "cardID": "0123456789",
+            "listBooked": [
+                {
+                    "id": "121"
+                }
+            ]
         },
         {
             "username": "Nhann",
             "password": "123",
-            "cardID": "1234567890"
+            "cardID": "1234567890",
+            "listBooked": [
+                {
+                    "id": "111"
+                },
+                {
+                    "id": "221"
+                }
+            ]
         },
         {
             "username": "Tinnn",
             "password": "123",
-            "cardID": "2345678901"
+            "cardID": "2345678901",
+            "listBooked": [
+                {
+                    "id": "211"
+                }
+            ]
+        },
+        {
+            "username": "vmquynh",
+            "password": "230103",
+            "cardID": "0982168116",
+            "listBooked": []
         }
     ]
 }
