@@ -13,9 +13,11 @@ def cls():
     os.system('cls')
 def waitForInput():
     input("Press ENTER to continue...")
+
 def sendMsg(s, *listMsg):
     for i in listMsg:
         s.sendall(bytes(i, FORMAT))
+        
 def recvMsg(s):
     return s.recv(SIZE).decode(FORMAT)
 
@@ -96,6 +98,42 @@ def ddmmyy(s):
     dateLeft = str(input("Date left to hotel: (dd/mm/yy): "))
     sendMsg(s, dateArrive, dateLeft)
 
+def hotelsInfo(s):
+    cls()
+    print("Result after request:")
+    print("Hotel name: ", hotelName)
+
+    info1 = recvMsg(s)
+    sendMsg(s, "CheckRecv")
+    info2 = recvMsg(s)
+    if (info1 != "NONE_INFO"):
+        print("Single: ")
+        print("Description: ", info1)
+        print("Price: ", info2)
+    else:
+        print("Single room now is not available")
+
+    info1 = recvMsg(s)
+    sendMsg(s, "CheckRecv")
+    info2 = recvMsg(s)
+    if (info1 != "NONE_INFO"):
+        print("Single: ")
+        print("Description: ", info1)
+        print("Price: ", info2)
+    else:
+        print("Couple room now is not available")
+
+    info1 = recvMsg(s)
+    sendMsg(s, "CheckRecv")
+    info2 = recvMsg(s)
+    if (info1 != "NONE_INFO"):
+        print("Single: ")
+        print("Description: ", info1)
+        print("Price: ", info2)
+    else:
+        print("Family room now is not available")
+    waitForInput()
+
 def searchingMenu(s):
     sendMsg(s, '3')
     cls()
@@ -108,42 +146,8 @@ def searchingMenu(s):
             print("No such hotel for you ! Type again")
             continue
         break
-
     ddmmyy(s)
-    cls()
-    print("Result after request:")
-    print("Hotel name: ", hotelName)
-
-    info1 = recvMsg(s)
-    print(info1)
-    # info2 = recvMsg(s)
-    # print(info2)
-    # if(info != "NONE_INFO"):
-    #     print("Single: ")
-    #     print("Description: ", info1)
-    #     print("Price: ", info2)
-    # else:
-    #     print("Single room now is not available")
-    #
-    # info1 = recvMsg(s)
-    # info2 = recvMsg(s)
-    # if (info != "NONE_INFO"):
-    #     print("Single: ")
-    #     print("Description: ", info1)
-    #     print("Price: ", info2)
-    # else:
-    #     print("Couple room now is not available")
-    #
-    # info1 = recvMsg(s)
-    # info2 = recvMsg(s)
-    # if (info != "NONE_INFO"):
-    #     print("Single: ")
-    #     print("Description: ", info1)
-    #     print("Price: ", info2)
-    # else:
-    #     print("Family room now is not available")
-
-    waitForInput()
+    hotelsInfo(s)
 
 def bookRoomMenu(s):
     while True:

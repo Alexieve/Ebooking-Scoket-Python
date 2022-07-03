@@ -13,8 +13,8 @@ SIZE = 1024
 # 0 Exit
 # 1 Check login
 # 2 Add account
-# 3 ...
-# 4 ...
+# 3 Searching Hotels
+# 4 Booking Hotels
 
 ##### CLASS #####
 class users:
@@ -138,37 +138,38 @@ def sendHotelsInfo(s,serverData, hotelName):
     showRecvData(dateArrive, dateLeft)
     temp = 'single'
     ok = 1
-    sendMsg(s, '341241', 'dsfsdf')
-    # sendMsg(s, "12345")
-    # for i in serverData[1]['hotels']:
-    #     if(i['name'] == hotelName):
-    #         while True:
-    #             empty = False
-    #             haveBooked = False
-    #             for j in i['rooms'][temp]['listBooked']:
-    #                 haveBooked = True
-    #                 dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
-    #                 dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
-    #                 if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i['rooms'][temp]['empty']) > 0):
-    #                     print("des------", i['rooms'][temp]['description'])
-    #                     print("pri------", i['rooms'][temp]['price'])
-    #                     sendMsg(s, i['rooms'][temp]['description'], i['rooms'][temp]['price']) #Here
-    #                     empty = True
-    #                     break
-    #             if not empty and haveBooked:
-    #                 sendMsg(s, "NONE_INFO", "NONE_INFO")
-    #             if not haveBooked:
-    #                 print("des------", i['rooms'][temp]['description'])
-    #                 print("pri------", i['rooms'][temp]['price'])
-    #                 sendMsg(s, i['rooms'][temp]['description'], i['rooms'][temp]['price'])
-    #             if ok == 1:
-    #                 temp = "couple"
-    #                 ok = 2
-    #             elif ok == 2:
-    #                 temp = "family"
-    #                 ok = 3
-    #             elif ok == 3: break
-    #         break
+    for i in serverData[1]['hotels']:
+        if(i['name'] == hotelName):
+            while True:
+                empty = False
+                haveBooked = False
+                for j in i['rooms'][temp]['listBooked']:
+                    haveBooked = True
+                    dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
+                    dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
+                    if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i['rooms'][temp]['empty']) > 0):
+                        sendMsg(s, i['rooms'][temp]['description'])
+                        recvMsg(s)
+                        sendMsg(s, i['rooms'][temp]['price'])
+                        empty = True
+                        break
+                if not empty and haveBooked:
+                    sendMsg(s, "NONE_INFO")
+                    recvMsg(s)
+                    sendMsg(s, "NONE_INFO")
+                if not haveBooked:
+                    sendMsg(s, i['rooms'][temp]['description'])
+                    recvMsg(s)
+                    sendMsg(s, i['rooms'][temp]['price'])
+                if ok == 1:
+                    temp = "couple"
+                    ok = 2
+                elif ok == 2:
+                    temp = "family"
+                    ok = 3
+                elif ok == 3: break
+            break
+    print("Sending hotels information complete!")
 
 def findHotel(s,serverData):
     print("Listening hotel's request from client")
