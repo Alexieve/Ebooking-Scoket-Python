@@ -22,6 +22,7 @@ class booked:
     id: str
     checkin: str
     checkout: str
+    note:str
 
 class users:
     def __init__(self, username, password, cardID):
@@ -29,6 +30,7 @@ class users:
         self.password = password
         self.cardID = cardID
         self.listBooked = []
+
 
 ##### PROCESS FUNCTIONS #####
 def cls():
@@ -145,7 +147,7 @@ def sendHotelsInfo(s,serverData, hotelName):
                 empty = False
                 haveBooked = False
                 for j in i['rooms'][temp]['listBooked']:
-                    haveBooked = True
+                    haveBooked = True ###Có người khác đã đặt
                     dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
                     dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
                     if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i['rooms'][temp]['empty']) > 0):
@@ -182,19 +184,68 @@ def findHotel(s,serverData):
             print("No such hotel match the search")
             sendMsg(s, "False")
             continue
-        print("Valid hotels")
+        print("Valid hotel to search")
         sendMsg(s, "True")
         sendHotelsInfo(s, serverData, hotelName)
+        break
+
+def checkEmpty(s,hotelName, roomType,dateArrive,dateLeft,serverData):   ###đáng lẽ nên xài hàm này cho searchHotel luôn :<
+    for i in serverData[1]['hotels']:
+        if(i['name'] == hotelName):
+            while True:
+                empty = False
+                haveBooked = False
+                for j in i['rooms'][roomType]['listBooked']:
+                    haveBooked = True ###Có người khác đã đặt
+                    dateBooked = datetime.datetime.strptime(j['checkin'], "%d/%m/%y")
+                    dateBookedLeft = datetime.datetime.strptime(j['checkout'], "%d/%m/%y")
+                    if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i['rooms'][roomType]['empty']) > 0):
+                        return True
+                if not empty and haveBooked:
+                    return False
+                if not haveBooked:
+                    return True
+            break
+
+def bookingRooms(s,hotelName,serverData):
+    while True:
+        roomType = recvMsg(s)
+        showRecvData(roomType)
+        sendMsg(s,"ok")
+        dateArrive = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
+        dateLeft = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
+        showRecvData(dateArrive,dateLeft)
+        empty = checkEmpty(s,hotelName,roomType,dateArrive,dateLeft,serverData)
+        if not empty:
+            sendMsg(s,'False')
+            continue
+        sendMsg(s,'True')
+        note = recvMsg(s)
+        showRecvData(note)
+        print(note)
+        break
+    ###Saving process (not done)
 
 def bookingHotel(s,serverData):
     print("Listening hotel to book from client")
-    hotelName = recvMsg(s)
-    showRecvData(hotelName)
-    exist = checkExistHotel(serverData, hotelName)
-    if exist == True:
-        print("No such hotel match the search")
-        sendMsg(s, '0')
-    sendMsg(s, '1')
+    while True:
+        hotelName = recvMsg(s)
+        showRecvData(hotelName)
+        exist = checkExistHotel(serverData, hotelName)  ###Chack xem Client nhập đúng tên hay không
+        if exist == False:
+            print("No such hotel match the search")
+            sendMsg(s, 'False')
+            continue
+        break
+    print("Valid hotel to book")
+    sendMsg(s,"True")
+    while True:
+        bookingRooms(s,hotelName,serverData)
+        if recvMsg(s) == 'continue':
+            continue
+        break
+    print("Booking process is done")
+
 
 ##### MAIN #####
 def main():
@@ -222,6 +273,5 @@ def main():
                 elif prosCode == '3': findHotel(conn, serverData)
                 elif prosCode == '4': bookingHotel(conn, serverData)
         s.close()
-
 
 main()

@@ -8,19 +8,24 @@ ADDR = (IP, PORT)
 FORMAT = "utf-8"
 SIZE = 1024
 
+
 ##### PROCESS FUNCTIONS #####
 def cls():
     os.system('cls')
 
+
 def waitForInput():
     input("Press ENTER to continue...")
+
 
 def sendMsg(s, *listMsg):
     for i in listMsg:
         s.sendall(bytes(i, FORMAT))
 
+
 def recvMsg(s):
     return s.recv(SIZE).decode(FORMAT)
+
 
 ##### MAIN FUNCTIONS #####
 def loginFunc(s):
@@ -37,6 +42,7 @@ def loginFunc(s):
         print("Login success!")
     waitForInput()
     return check
+
 
 def registerFunc(s):
     def checkValidUsername(username):
@@ -96,15 +102,17 @@ def registerFunc(s):
         waitForInput()
         return
 
+
 def ddmmyy(s):
     dateArrive = str(input("Date arrive to hotel: (dd/mm/yy): "))
     dateLeft = str(input("Date left to hotel: (dd/mm/yy): "))
     sendMsg(s, dateArrive, dateLeft)
 
-def hotelsInfo(s, hotelName):
+
+def hotelsInfo(s,hotelName):
     cls()
     print("Result after request:")
-    print("Hotel name:", hotelName)
+    print("Hotel name: ", hotelName)
 
     info1 = recvMsg(s)
     sendMsg(s, "CheckRecv")
@@ -120,7 +128,7 @@ def hotelsInfo(s, hotelName):
     sendMsg(s, "CheckRecv")
     info2 = recvMsg(s)
     if (info1 != "NONE_INFO"):
-        print("Single:")
+        print("Couple:")
         print("Description:", info1)
         print("Price:", info2)
     else:
@@ -130,12 +138,13 @@ def hotelsInfo(s, hotelName):
     sendMsg(s, "CheckRecv")
     info2 = recvMsg(s)
     if (info1 != "NONE_INFO"):
-        print("Single:")
+        print("Family:")
         print("Description:", info1)
         print("Price:", info2)
     else:
         print("Family room now is not available")
     waitForInput()
+
 
 def searchingMenu(s):
     sendMsg(s, '3')
@@ -150,22 +159,50 @@ def searchingMenu(s):
             continue
         break
     ddmmyy(s)
-    hotelsInfo(s, hotelName)
+    hotelsInfo(s,hotelName)
+
+def booking(s,hotelName):
+    while True:
+        print("--------------------------------")
+        roomType = str(input("Room type: "))
+        while True:
+            if roomType != 'single' and roomType != 'couple' and roomType != 'family':
+                roomType = str(input("No such room type.Type again here: "))
+            else: break
+        sendMsg(s, roomType)
+        recvMsg(s)  ##Nhận tin nhắn OK bên Server
+        ddmmyy(s)
+        empty = recvMsg(s)
+        if(empty == 'False'):
+            print("This room type is full!")
+            continue
+        else:
+            note = str(input("Note: "))
+            sendMsg(s,note)
+            break
 
 def bookRoomMenu(s):
+    sendMsg(s, '4')
+    cls()
+    print("Booking hotel:")
     while True:
-        sendMsg(s, '4')
-        cls()
-        print("Booking hotel:")
         hotelName = str(input("Hotel name: "))
         sendMsg(s, hotelName)
         existHotel = recvMsg(s)
-        if existHotel == '0':
+        if existHotel == 'False':
             print("No such hotel for you ! Type again")
             continue
-    roomType = str(input("Room type: "))
-    sendMsg(s, roomType)
-    ddmmyy(s)
+        break
+    while True:
+        booking(s,hotelName)
+        con = str(input("Continue to book ? (y/n): "))
+        if con ==  'y':
+            sendMsg(s,'continue')
+            continue
+        sendMsg(s,'break')
+        break
+
+
 
 def showMenu(s):
     while True:
@@ -184,6 +221,7 @@ def showMenu(s):
             print("Invalid input, please try again!")
             waitForInput()
             continue
+
 
 def startingFunc(s):
     while True:
@@ -207,6 +245,7 @@ def startingFunc(s):
             waitForInput()
             continue
 
+
 ##### MAIN #####
 def main():
     print("Connecting...")
@@ -220,5 +259,6 @@ def main():
                 break
             showMenu(s)
         s.close()
+
 
 main()
