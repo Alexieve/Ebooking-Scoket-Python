@@ -18,11 +18,12 @@ SIZE = 1024
 
 ##### CLASS #####
 class booked:
-    user: str
-    id: str
-    checkin: str
-    checkout: str
-    note:str
+    def __init__(self, user, id, checkin, checkout, Note):
+        self.user = user
+        self.id = id
+        self.checkin= checkin
+        self.checkout= checkout
+        self.Note= Note
 
 class users:
     def __init__(self, username, password, cardID):
@@ -105,7 +106,7 @@ def checkLogin(s, serverData):
         if (username == i['username'] and password == i['password']):
             sendMsg(s, "True")
             print("Checking complete!")
-            return
+            return username
     sendMsg(s, "False")
     print("Checking complete!")
 
@@ -131,7 +132,8 @@ def loadUsersData():
 def loadHotelsData():
     print("Loading hotels data...")
     with open("hotelsdata.json", "r") as readFile:
-        hotelsData = json.load(readFile)
+        hotelsData = json.load(readFile) #à hiểu, để tui xuống đó check phát
+        #tui tưởng lỗi bên server chứ, tại tới đó tui thấy server nó bị tắt nên cho dù client gửi gì đâu có được nhỉ ?
     print("Loading complete!")
     return hotelsData
 
@@ -207,7 +209,46 @@ def checkEmpty(s,hotelName, roomType,dateArrive,dateLeft,serverData):   ###đán
                     return True
             break
 
-def bookingRooms(s,hotelName,serverData):
+def idGenerator(name,type,serverData):
+    id = 0
+    for i in serverData[1]['hotels']:
+        id+=1
+        if i['name'] == name:break
+    id*=100
+    if type == 'single': id+=10
+    elif type == 'couple': id+=20
+    elif type == 'family': id+=30
+    fid = str(id + int(i['rooms'][type]['booked']) +1)
+    return fid
+
+def dateToStr(str): ## :>>>>>>>
+    day= str[8:10]
+    month = str[5:7]
+    year = str[2:4]
+    date = day + '/' + month+ '/' + year
+    return date
+
+def saveUserBooked(s,id,guest,serverData):
+    with open("usersdata.json") as file:
+        data = json.load(file)
+        userss = data["users"]
+        for i in userss:
+            if i['username'] == guest:
+                tmpUser = i['listBooked']
+                bookedDataJson = {'id': id}
+                tmpUser.append(bookedDataJson)
+    serverData[0] = data
+    saveUsersData(serverData[0])
+    print("Adding user's ID complete!")
+
+def paymentCount(name,type,serverData):
+    for i in serverData[1]['hotels']:
+        if(i['name'] == name):
+            price = int(i['rooms'][type]['price'])
+            break
+    return price
+
+def bookingRooms(s,hotelName,serverData,guest):
     while True:
         roomType = recvMsg(s)
         showRecvData(roomType)
@@ -224,9 +265,36 @@ def bookingRooms(s,hotelName,serverData):
         showRecvData(note)
         print(note)
         break
-    ###Saving process (not done)
+    arriveTmp= str(dateArrive) ##không hỗ trợ dateTime nên phải biến qua string
+    leftTmp = str(dateLeft)
+    arrive = dateToStr(arriveTmp)
+    left = dateToStr(leftTmp)
+    id = idGenerator(hotelName, roomType, serverData)
+    ###Saving process
+    with open("hotelsdata.json") as file:
+        data = json.load(file)
+        hotel = data['hotels']
+        for i in hotel:
+            if i['name'] == hotelName: #đống này thiếu data nè, truyền lại data đi
+                tmpRoom = i['rooms'][roomType]
+                bookedData = booked(guest, id, arrive, left, note)
+                bookedDataJson = {'username': bookedData.user, 'id': bookedData.id, 'checkin': bookedData.checkin, 'checkout': bookedData.checkout, 'Note': bookedData.Note}
+                tmpRoom['listBooked'].append(bookedDataJson)
+    serverData[1] = data
+    saveHotelsData(serverData[1])
+    print("Adding hotel_listbooked complete!")
+    ###Saving user data process
+    saveUserBooked(s,id,guest,serverData)
+    price = paymentCount(hotelName,roomType,serverData)
+    return price
 
-def bookingHotel(s,serverData):
+def cardIDChecking(serverData,cardID,guest):
+    for i in serverData[0]['users']:
+        if i['username']== guest:
+            if i['cardID'] == cardID:return True
+            else: return False
+
+def bookingHotel(s,serverData,guest):
     print("Listening hotel to book from client")
     while True:
         hotelName = recvMsg(s)
@@ -239,11 +307,22 @@ def bookingHotel(s,serverData):
         break
     print("Valid hotel to book")
     sendMsg(s,"True")
+    pay = 0
     while True:
-        bookingRooms(s,hotelName,serverData)
+        pay += bookingRooms(s,hotelName,serverData,guest)
         if recvMsg(s) == 'continue':
             continue
         break
+    sendMsg(s,str(pay)) ##
+    while True:
+        cardID = recvMsg(s)
+        rightID = cardIDChecking(serverData,cardID,guest)
+        if rightID == False :
+            sendMsg(s,'again')
+            continue
+        sendMsg(s,'ok')
+        break
+
     print("Booking process is done")
 
 
@@ -261,6 +340,7 @@ def main():
         s.listen()
         print("Waiting for connected...")
         conn, addr = s.accept()
+        guest = ' '
         with conn:
             print(f"Connected by {addr}")
             while True:
@@ -268,10 +348,10 @@ def main():
                 if prosCode == '0':
                     print("Client disconnected!")
                     break
-                elif prosCode == '1': checkLogin(conn, serverData)
+                elif prosCode == '1': guest = checkLogin(conn, serverData)
                 elif prosCode == '2': addAccount(conn, serverData)
                 elif prosCode == '3': findHotel(conn, serverData)
-                elif prosCode == '4': bookingHotel(conn, serverData)
+                elif prosCode == '4': bookingHotel(conn, serverData,guest)
         s.close()
 
 main()

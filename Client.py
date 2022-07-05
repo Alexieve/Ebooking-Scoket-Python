@@ -201,6 +201,19 @@ def bookRoomMenu(s):
             continue
         sendMsg(s,'break')
         break
+    price = recvMsg(s)
+    cls()
+    print("All the price is: ",price)
+    while True:
+        cardID = str(input("Enter your cardID to perform payment: "))
+        sendMsg(s, cardID)
+        checkID =  recvMsg(s)
+        if checkID == 'again':
+            print("Wrong ID, type again!")
+            continue
+        break
+    cls()
+
 
 
 
