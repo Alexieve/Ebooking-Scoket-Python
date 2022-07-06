@@ -8,7 +8,7 @@
                     "price": "500000",
                     "description": "Room for 1 person",
                     "empty": "2",
-                    "booked": "1",
+                    "booked": "3",
                     "listBooked": [
                         {
                             "username": "Nhann",
@@ -52,7 +52,7 @@
                     "price": "1200000",
                     "description": "Room for 4 people",
                     "empty": "3",
-                    "booked": "0",
+                    "booked": "1",
                     "listBooked": [
                         {
                             "username": "Quynh",
@@ -73,7 +73,7 @@
                     "price": "400000",
                     "description": "Room for 1 person",
                     "empty": "2",
-                    "booked": "1",
+                    "booked": "2",
                     "listBooked": [
                         {
                             "username": "Tinnn",
@@ -94,8 +94,8 @@
                 "couple": {
                     "price": "600000",
                     "description": "Room for 2 people",
-                    "empty": "2",
-                    "booked": "1",
+                    "empty": "1",
+                    "booked": "2",
                     "listBooked": [
                         {
                             "username": "Nhann",
@@ -103,6 +103,13 @@
                             "checkin": "01/07/22",
                             "checkout": "07/07/22",
                             "Note": "A party will be held on 2nd"
+                        },
+                        {
+                            "username": "Quynh",
+                            "id": "222",
+                            "checkin": "13/04/21",
+                            "checkout": "14/06/21",
+                            "Note": "okokokokokokoko"
                         }
                     ]
                 },
@@ -110,7 +117,7 @@
                     "price": "800000",
                     "description": "Room for 4 people",
                     "empty": "2",
-                    "booked": "0",
+                    "booked": "1",
                     "listBooked": [
                         {
                             "username": "Quynh",
