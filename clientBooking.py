@@ -3,12 +3,33 @@ from clientLib import *
 def booking(s, hotelName):
     while True:
         print("--------------------------------")
-        roomType = str(input("Room type: "))
-        while True:
-            if roomType != 'single' and roomType != 'couple' and roomType != 'family':
-                roomType = str(input("No such room type.Type again here: "))
-            else: break
-        sendMsg(s, roomType)
+        print("1.Single")
+        print("---> Description:", recvMsg(s))
+        sendMsg(s,'ok')
+        print("---> Price:", recvMsg(s))
+        sendMsg(s,'ok')
+        print("---> Empty:",recvMsg(s))
+        sendMsg(s,'ok')
+        print("2.Couple")
+        print("---> Description:", recvMsg(s))
+        sendMsg(s, 'ok')
+        print("---> Price:", recvMsg(s))
+        sendMsg(s, 'ok')
+        print("---> Empty:", recvMsg(s))
+        sendMsg(s,'ok')
+        print("3.Family")
+        print("---> Description:", recvMsg(s))
+        sendMsg(s, 'ok')
+        print("---> Price:", recvMsg(s))
+        sendMsg(s, 'ok')
+        print("---> Empty:", recvMsg(s))
+        sendMsg(s,'ok')
+        numRoomType = input("The room type you want is: ")
+        sendMsg(s, numRoomType)
+        if numRoomType == '1':roomType = 'single'
+        elif numRoomType == '2': roomType = 'couple'
+        elif numRoomType == '3': roomType = 'family'
+
         recvMsg(s)  ##Nhận tin nhắn OK bên Server
         ddmmyy(s)
         empty = recvMsg(s)
@@ -24,15 +45,16 @@ def bookRoomMenu(s):
     sendMsg(s, '4')
     cls()
     print("Booking hotel:")
+    i=1
     while True:
-        hotelName = str(input("Hotel name: "))
-        sendMsg(s, hotelName)
-        existHotel = recvMsg(s)
-        if existHotel == 'False':
-            print("No such hotel for you ! Type again")
-            continue
-        break
-
+        name = recvMsg(s)
+        if name == 'out': break
+        print(i,":",name)
+        sendMsg(s,'ok')
+        i+=1
+    numChoice = input("Hotel you want to book is: ")
+    sendMsg(s,numChoice)
+    hotelName = recvMsg(s)
     while True:
         booking(s, hotelName)
         con = str(input("Continue to book ? (y/n): "))

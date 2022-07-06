@@ -28,10 +28,31 @@ def paymentCount(name, type, serverData):
 
 def bookingRooms(s, hotelName, serverData, guest):
     while True:
-        roomType = recvMsg(s)
-        fromClient(s)
-        showRecvData(roomType)
+        for i in serverData[1]['hotels']:
+            if i['name']== hotelName: ##xin lỗi, tui phải tà đạo :<
+                sendMsg(s,i['rooms']['single']['description'])
+                recvMsg(s)
+                sendMsg(s,i['rooms']['single']['price'])
+                recvMsg(s)
+                sendMsg(s,i['rooms']['single']['empty'])
+                recvMsg(s)
+                sendMsg(s, i['rooms']['couple']['description'])
+                recvMsg(s)
+                sendMsg(s, i['rooms']['couple']['price'])
+                recvMsg(s)
+                sendMsg(s, i['rooms']['couple']['empty'])
+                recvMsg(s)
+                sendMsg(s, i['rooms']['family']['description'])
+                recvMsg(s)
+                sendMsg(s, i['rooms']['family']['price'])
+                recvMsg(s)
+                sendMsg(s, i['rooms']['family']['empty'])
+                recvMsg(s)
+        numRoomType = recvMsg(s)
         sendMsg(s, "ok")
+        if numRoomType == '1':roomType = 'single'
+        elif numRoomType == '2': roomType = 'couple'
+        elif numRoomType == '3': roomType = 'family'
         dateArrive = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
         dateLeft = datetime.datetime.strptime(recvMsg(s), "%d/%m/%y")
         fromClient(s)
@@ -57,32 +78,35 @@ def bookingRooms(s, hotelName, serverData, guest):
         hotel = data['hotels']
         for i in hotel:
             if i['name'] == hotelName:
+                tmp = i['rooms'][roomType]['empty']
+                tmpp = str(int(tmp)-1)
                 tmpRoom = i['rooms'][roomType]
                 bookedData = booked(guest, id, arrive, left, note)
+                i['rooms'][roomType]['empty'] = tmpp
                 bookedDataJson = {'username': bookedData.user, 'id': bookedData.id, 'checkin': bookedData.checkin, 'checkout': bookedData.checkout, 'Note': bookedData.Note}
                 tmpRoom['listBooked'].append(bookedDataJson)
     serverData[1] = data
     saveHotelsData(serverData[1])
     print("Adding hotel_listbooked complete!")
     ###Saving user data process
-    saveUserBooked(s, id, guest, serverData)
+    addingUserBooked(id, guest, serverData)
     price = paymentCount(hotelName,roomType, serverData)
     return price
 
 def bookingHotel(s, serverData, guest):
     print(f"Listening hotel to book from client {s.getpeername()}...")
-    while True:
-        hotelName = recvMsg(s)
-        fromClient(s)
-        showRecvData(hotelName)
-        exist = checkExistHotel(serverData, hotelName)
-        if exist == False:
-            print("No such hotel match the search")
-            sendMsg(s, 'False')
-            continue
-        break
+    for i in serverData[1]['hotels']:
+        sendMsg(s,i['name'])
+        recvMsg(s)
+    sendMsg(s,'out')
+    idHotel=recvMsg(s)
+    for i in serverData[1]['hotels']:
+        if i['ID']==idHotel:
+            hotelName = i['name']
+            sendMsg(s,hotelName)
+            break
+
     print("Valid hotel to book")
-    sendMsg(s, "True")
     pay = 0
     while True:
         pay += bookingRooms(s,hotelName,serverData,guest)
