@@ -79,6 +79,9 @@ def bookingRooms(s, hotelName, serverData, guest):
         for i in hotel:
             if i['name'] == hotelName:
                 tmp = i['rooms'][roomType]['empty']
+                list = i['rooms'][roomType]['booked']
+                listpp = str(int(list)+1)
+                i['rooms'][roomType]['booked'] = listpp
                 tmpp = str(int(tmp)-1)
                 tmpRoom = i['rooms'][roomType]
                 bookedData = booked(guest, id, arrive, left, note)
