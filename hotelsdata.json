@@ -8,7 +8,7 @@
                     "price": "500000",
                     "description": "Room for 1 person",
                     "empty": "2",
-                    "booked": "3",
+                    "booked": "1",
                     "listBooked": [
                         {
                             "username": "Nhann",
@@ -16,20 +16,6 @@
                             "checkin": "01/07/22",
                             "checkout": "07/07/22",
                             "Note": "Wine is included"
-                        },
-                        {
-                            "username": "Quynh",
-                            "id": "112",
-                            "checkin": "13/04/21",
-                            "checkout": "13/05/21",
-                            "Note": "qwe"
-                        },
-                        {
-                            "username": "Quynh",
-                            "id": "112",
-                            "checkin": "13/04/21",
-                            "checkout": "13/05/21",
-                            "Note": "qweeeee"
                         }
                     ]
                 },
@@ -52,15 +38,8 @@
                     "price": "1200000",
                     "description": "Room for 4 people",
                     "empty": "3",
-                    "booked": "1",
+                    "booked": "0",
                     "listBooked": [
-                        {
-                            "username": "Quynh",
-                            "id": "131",
-                            "checkin": "13/04/21",
-                            "checkout": "13/05/21",
-                            "Note": "asdf"
-                        }
                     ]
                 }
             }
@@ -72,7 +51,7 @@
                 "single": {
                     "price": "400000",
                     "description": "Room for 1 person",
-                    "empty": "2",
+                    "empty": "1",
                     "booked": "2",
                     "listBooked": [
                         {
@@ -125,13 +104,6 @@
                             "checkin": "13/02/21",
                             "checkout": "13/03/21",
                             "Note": "tesst"
-                        },
-                        {
-                            "username": "Quynh",
-                            "id": "231",
-                            "checkin": "21/02/21",
-                            "checkout": "21/03/21",
-                            "Note": "rew"
                         }
                     ]
                 }
