@@ -1,0 +1,129 @@
+{
+    "hotels": [
+        {
+            "name": "fivestar",
+            "ID": "1",
+            "rooms": {
+                "single": {
+                    "image": "1.jpg",
+                    "price": "500000",
+                    "description": "Room for 1 person",
+                    "empty": "1",
+                    "booked": "2",
+                    "listBooked": [
+                        {
+                            "username": "nhann",
+                            "id": "111",
+                            "checkin": "2022-07-01",
+                            "checkout": "2022-07-07",
+                            "timeBooked": "00:00:00",
+                            "Note": "Wine is included"
+                        },
+                        {
+                            "username": "quynh",
+                            "id": "112",
+                            "checkin": "2022-10-10",
+                            "checkout": "2022-11-11",
+                            "timeBooked": "00:00:00",
+                            "Note": "abcxyz"
+                        }
+                    ]
+                },
+                "couple": {
+                    "image": "2.jpg",
+                    "price": "800000",
+                    "description": "Room for 2 people",
+                    "empty": "2",
+                    "booked": "1",
+                    "listBooked": [
+                        {
+                            "username": "quynh",
+                            "id": "121",
+                            "checkin": "2022-07-01",
+                            "checkout": "2022-07-07",
+                            "timeBooked": "00:00:00",
+                            "Note": "Asked a permission play guitar at night"
+                        }
+                    ]
+                },
+                "family": {
+                    "image": "3.jpg",
+                    "price": "1200000",
+                    "description": "Room for 4 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                }
+            }
+        },
+        {
+            "name": "fourstar",
+            "ID": "2",
+            "rooms": {
+                "single": {
+                    "image": "4.jpg",
+                    "price": "400000",
+                    "description": "Room for 1 person",
+                    "empty": "2",
+                    "booked": "1",
+                    "listBooked": [
+                        {
+                            "username": "tinnn",
+                            "id": "211",
+                            "checkin": "2022-07-01",
+                            "checkout": "2022-07-07",
+                            "timeBooked": "00:00:00",
+                            "Note": "Need a parking lot for cars"
+                        }
+                    ]
+                },
+                "couple": {
+                    "image": "5.jpg",
+                    "price": "600000",
+                    "description": "Room for 2 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                },
+                "family": {
+                    "image": "6.jpg",
+                    "price": "800000",
+                    "description": "Room for 4 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                }
+            }
+        },
+        {
+            "name": "threestar",
+            "ID": "3",
+            "rooms": {
+                "single": {
+                    "image": "7.jpg",
+                    "price": "300000",
+                    "description": "Room for 1 person",
+                    "empty": "4",
+                    "booked": "0",
+                    "listBooked": []
+                },
+                "couple": {
+                    "image": "8.jpg",
+                    "price": "400000",
+                    "description": "Room for 2 people",
+                    "empty": "5",
+                    "booked": "0",
+                    "listBooked": []
+                },
+                "family": {
+                    "image": "9.jpg",
+                    "price": "500000",
+                    "description": "Room for 4 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                }
+            }
+        }
+    ]
+}

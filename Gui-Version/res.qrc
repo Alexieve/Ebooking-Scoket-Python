@@ -1,0 +1,18 @@
+<RCC>
+  <qresource prefix="images">
+    <file>save.svg</file>
+    <file>credit-card.svg</file>
+    <file>x-circle.svg</file>
+    <file>check-circle.svg</file>
+    <file>register loading animation.gif</file>
+    <file>user.svg</file>
+    <file>arrow-right-circle.svg</file>
+    <file>arrow-left-circle.svg</file>
+    <file>home.svg</file>
+    <file>log-out.svg</file>
+    <file>search.svg</file>
+    <file>shopping-cart.svg</file>
+    <file>Logo_HCMUS.png</file>
+    <file>261029.jpg</file>
+  </qresource>
+</RCC>
