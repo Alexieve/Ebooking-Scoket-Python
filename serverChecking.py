@@ -6,7 +6,6 @@ def addAccount(s, serverData):
         username = str(recvMsg(s))
         showRecvData(username)
         exits = checkExistAccount(serverData, username)
-        print("!@#!@#!@")
         if (exits):
             print("Account exist!")
             sendMsg(s, "True")

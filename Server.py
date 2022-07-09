@@ -33,6 +33,9 @@ def handleClient(conn, addr, serverData):
             elif prosCode == '4':
                 print(f"[REQUEST] Client {addr} ask to book a room:")
                 bookingHotel(conn, serverData, guest)
+            elif prosCode == '5':
+                print(f"[REQUEST] Client {addr} ask to cancle booking:")
+                showID(conn,serverData,guest)
     conn.close()
 
 def main():
