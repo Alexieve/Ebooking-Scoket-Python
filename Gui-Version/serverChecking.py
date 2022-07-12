@@ -74,6 +74,19 @@ def showNextHotel(s, serverData):
     index = index % len(serverData[1]['hotels'])
     sendHotelsInfo(s, serverData, index)
 
+def findHotelIndex(serverData, hotelName):
+    check = False
+    index = 0
+    for i in serverData[1]['hotels']:
+        if i['name'] == hotelName:
+            check = True
+            break
+        index += 1
+    if check:
+        return index
+    else:
+        return False
+
 def findHotel(s, serverData):
     print(f"Listening hotel's request from client {s.getpeername()}...")
     data = json.loads(recvMsg(s))

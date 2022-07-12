@@ -30,12 +30,14 @@ def checkEmpty(hotelData, roomType, dateArrive, dateLeft):
     empty = False
     dateArrive = datetime.strptime(dateArrive, '%Y-%m-%d').date()
     dateLeft = datetime.strptime(dateLeft, '%Y-%m-%d').date()
+    if dateArrive > dateLeft:
+        return False
     haveBooked = False
     for i in hotelData['rooms'][roomType]['listBooked']:
         haveBooked = True
         dateBooked = datetime.strptime(i['checkin'], '%Y-%m-%d').date()
         dateBookedLeft = datetime.strptime(i['checkout'], '%Y-%m-%d').date()
-        if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(hotelData['rooms'][roomType]['empty']) > 0):
+        if (dateLeft < dateBooked or dateArrive > dateBookedLeft) and int(hotelData['rooms'][roomType]['empty']) > 0:
             return True
     if not empty and haveBooked:
         return False

@@ -255,19 +255,6 @@ def showCart(s, serverData, guest):
     sendMsg(s, json.dumps([str(index + 1), str(len(userCartData))]))
     recvMsg(s)
 
-def findHotelIndex(serverData, hotelName):
-    check = False
-    index = 0
-    for i in serverData[1]['hotels']:
-        if i['name'] == hotelName:
-            check = True
-            break
-        index += 1
-    if check:
-        return index
-    else:
-        return False
-
 def addToCart(s, serverData, guest):
     data = json.loads(recvMsg(s))
     sendMsg(s, "ok")
