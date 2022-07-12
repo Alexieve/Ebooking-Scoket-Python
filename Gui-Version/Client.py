@@ -44,12 +44,18 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.close()
 
     def goSearch(self):
+        dateArrive = self.checkin.date().toPyDate()
+        dateLeft = self.checkout.date().toPyDate()
+        dateNow = datetime.now().date()
+        if dateArrive < dateNow or dateLeft < dateNow:
+            self.showPopup("The time is not valid")
+            return
         sendMsg(s, '3')
         hotelname = self.inputhotel.text()
         if hotelname == "":
             hotelname = " "
-        dateArrive = str(self.checkin.date().toPyDate())
-        dateLeft = str(self.checkout.date().toPyDate())
+        dateArrive = str(dateArrive)
+        dateLeft = str(dateLeft)
         sendMsg(s, json.dumps([hotelname, dateArrive, dateLeft]))
         recvMsg(s)
 
@@ -113,11 +119,17 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.getHotelInformation(self.hotelindexnow)
 
     def addToCart(self):
+        checkin = self.dateEdit11.date().toPyDate()
+        checkout = self.dateEdit_2.date().toPyDate()
+        dateNow = datetime.now().date()
+        if checkin < dateNow or checkout < dateNow:
+            self.showPopup("The time is not valid")
+            return
         sendMsg(s, '6')
         hotelName = self.hotelname2.text()
         roomType = self.type2.text()
-        checkin = str(self.dateEdit11.date().toPyDate())
-        checkout = str(self.dateEdit_2.date().toPyDate())
+        checkin = str(checkin)
+        checkout = str(checkout)
         note = self.noteinput.text()
         if note == "":
             note = "None"
