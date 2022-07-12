@@ -1,6 +1,7 @@
 {
     "hotels": [
         {
+            "image": "hotel1.jpg",
             "name": "fivestar",
             "ID": "1",
             "rooms": {
@@ -57,6 +58,7 @@
             }
         },
         {
+            "image": "hotel2.jpg",
             "name": "fourstar",
             "ID": "2",
             "rooms": {
@@ -96,6 +98,7 @@
             }
         },
         {
+            "image": "hotel3.jpg",
             "name": "threestar",
             "ID": "3",
             "rooms": {
