@@ -140,6 +140,12 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.showPopup(check)
 
     def editCart(self):
+        checkin = self.dateEdit11_2.date().toPyDate()
+        checkout = self.dateEdit_3.date().toPyDate()
+        dateNow = datetime.now().date()
+        if checkin < dateNow or checkout < dateNow:
+            self.showPopup("The time is not valid")
+            return
         sendMsg(s, '8')
         sendMsg(s, str(self.cartindexnow))
         recvMsg(s)
@@ -148,8 +154,8 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         if check == "False":
             self.showPopup("You have not book any room yet!")
             return
-        checkin = str(self.dateEdit11_2.date().toPyDate())
-        checkout = str(self.dateEdit_3.date().toPyDate())
+        checkin = str(checkin)
+        checkout = str(checkout)
         note = self.noteinput_2.text()
         sendMsg(s, json.dumps([checkin, checkout, note]))
         recvMsg(s)
