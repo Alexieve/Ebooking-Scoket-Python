@@ -231,6 +231,14 @@ def editCart(s, serverData, guest):
     index = index % len(userCartData)
     cartData = json.loads(recvMsg(s))
     sendMsg(s, "ok")
+    availableTime = checkTime(cartData[0], cartData[1])
+    if not availableTime:
+        print("The time is not valid!")
+        sendMsg(s, "The time is not valid!")
+        recvMsg(s)
+        return
+    sendMsg(s, "True")
+    recvMsg(s)
     userCartData[index]['checkin'] = cartData[0]
     userCartData[index]['checkout'] = cartData[1]
     userCartData[index]['Note'] = cartData[2]
@@ -265,17 +273,17 @@ def addToCart(s, serverData, guest):
     hotelIndex = findHotelIndex(serverData, data[0])
     hotelData = serverData[1]['hotels'][hotelIndex]
     check = checkEmpty(hotelData, data[1], data[2], data[3])
-    if check:
+    if not check:
+        print("Not available now!")
+        sendMsg(s, "No room available now!")
+        recvMsg(s)
+    else:
         print("Available room!")
         sendMsg(s, "Add to cart success!")
         recvMsg(s)
         price = hotelData['rooms'][data[1]]['price']
         order = ordered("", data[0], data[1], price, data[2], data[3], "00:00:00", data[4])
         addingUserCart(order, guest, serverData)
-    else:
-        print("Not available now!")
-        sendMsg(s, "No room available now!")
-        recvMsg(s)
 
 def sendRoomsInfo(s, serverData, hotel, roomType):
     hotelIndex = findHotelIndex(serverData, hotel)

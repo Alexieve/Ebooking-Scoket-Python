@@ -59,6 +59,15 @@ def checkExistHotel(serverData, hotelName):
             return True
     return False
 
+def checkTime(dateArrive, dateLeft):
+    dateArrive = datetime.strptime(dateArrive, '%Y-%m-%d').date()
+    dateLeft = datetime.strptime(dateLeft, '%Y-%m-%d').date()
+    print(dateArrive)
+    print(dateLeft)
+    if dateArrive > dateLeft:
+        return False
+    return True
+
 def sendHotelsInfo(s, serverData, index):
     sendMsg(s, json.dumps(serverData[1]['hotels'][index]))
     recvMsg(s)
@@ -100,6 +109,12 @@ def findHotel(s, serverData):
     if not exitsHotel:
         print("Hotel not exits!")
         sendMsg(s, "Hotel does not exits!")
+        recvMsg(s)
+        return
+    availableTime = checkTime(dateArrive, dateLeft)
+    if not availableTime:
+        print("The time is not valid!")
+        sendMsg(s, "The time is not valid!")
         recvMsg(s)
         return
     print("Valid hotels")

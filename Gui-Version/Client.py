@@ -57,6 +57,8 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         sendMsg(s, "ok")
         if check == "Hotel does not exits!":
             self.showPopup(check)
+        elif check == "The time is not valid!":
+            self.showPopup(check)
         else:
             self.getHotelInformation(check)
             check = recvMsg(s)
@@ -139,6 +141,11 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         note = self.noteinput_2.text()
         sendMsg(s, json.dumps([checkin, checkout, note]))
         recvMsg(s)
+        check = recvMsg(s)
+        sendMsg(s, "ok")
+        if check != "True":
+            self.showPopup(check)
+            return
         self.showPopup("Save complete!")
 
     def deleteOrderedRoom(self):
@@ -323,6 +330,15 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
     def getInfor(self):
         username = recvMsg(s)
         sendMsg(s, "ok")
+        dateNow = datetime.now().date()
+        self.checkin.setDate(dateNow)
+        self.checkout.setDate(dateNow)
+        self.dateEdit11.setDate(dateNow)
+        self.dateEdit_2.setDate(dateNow)
+        self.dateEdit11_2.setDate(dateNow)
+        self.dateEdit_3.setDate(dateNow)
+        self.checkin22.setDate(dateNow)
+        self.dateEdit_4.setDate(dateNow)
         self.imagetmp1.setScaledContents(True)
         self.imageroom.setScaledContents(True)
         self.imageroom5.setScaledContents(True)
