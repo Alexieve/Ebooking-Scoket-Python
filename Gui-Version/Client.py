@@ -10,6 +10,7 @@ SIZE = 1024
 
 class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
     def goHome(self):
+        # self.homePageShow(0)
         self.stackedWidget.setCurrentWidget(self.hotelpage)
 
     def checkPay(self):
@@ -19,7 +20,16 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         if check == "None":
             self.showPopup("You have not book any room yet!")
             return
-        self.getPayInforMation()
+        data = json.loads(recvMsg(s))
+        sendMsg(s, "ok")
+        if data[3] != "True" and data[3] != "False":
+            self.showPopup(data[3])
+            self.cartindexnow = 0
+            self.goCart()
+            return
+        self.user2.setText(data[0])
+        self.room2.setText(str(data[1]))
+        self.price72.setText(str(data[2]))
         self.stackedWidget.setCurrentWidget(self.paymentpage)
 
     def goCart(self):
@@ -47,25 +57,36 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
 
         check = recvMsg(s)
         sendMsg(s, "ok")
-        if check != "True":
+        if check == "Hotel does not exits!":
             self.showPopup(check)
         else:
-            self.getHotelInformation()
+            self.getHotelInformation(check)
             check = recvMsg(s)
             sendMsg(s, "ok")
             if check != "True":
-                print("check")
                 self.showPopup(check)
 
     def goPay(self):
         sendMsg(s, '13')
         sendMsg(s, self.inputcardID.text())
         recvMsg(s)
+
         check = recvMsg(s)
         sendMsg(s, "ok")
+        if check == "Some orders in the cart have been removed because there are no available rooms":
+            self.showPopup(check)
+            self.cartindexnow = 0
+            self.goCart()
+            return
+
         self.showPopup(check)
         if check == "Payment complete!":
             self.goHome()
+            return
+        elif check == "Wrong Card ID!":
+            return
+        self.cartindexnow = 0
+        self.goCart()
 
     def bookingPageShow(self, roomType):
         sendMsg(s, '4')
@@ -86,13 +107,10 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.cartindexnow += index
         self.getCartInformation(self.cartindexnow)
 
-    def homePageShow(self, msg):
+    def homePageShow(self, index):
         sendMsg(s, '5')
-        sendMsg(s, self.hotelname1.text())
-        recvMsg(s)
-        sendMsg(s, msg)
-        recvMsg(s)
-        self.getHotelInformation()
+        self.hotelindexnow += index
+        self.getHotelInformation(self.hotelindexnow)
 
     def addToCart(self):
         sendMsg(s, '6')
@@ -174,8 +192,8 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.bookicon1.clicked.connect(partial(self.bookingPageShow, "single"))
         self.bookicon2.clicked.connect(partial(self.bookingPageShow, "couple"))
         self.bookicon3.clicked.connect(partial(self.bookingPageShow, "family"))
-        self.prevButton.clicked.connect(partial(self.homePageShow, "prev"))
-        self.nextButton.clicked.connect(partial(self.homePageShow, "next"))
+        self.prevButton.clicked.connect(partial(self.homePageShow, -1))
+        self.nextButton.clicked.connect(partial(self.homePageShow, 1))
 
     def subClickButton(self):
         self.homeButton.clicked.connect(self.goHome)
@@ -188,7 +206,6 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         super(mainMenu, self).__init__(parent=parent)
         self.setupUi(self)
 
-        self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.mainArea.setGraphicsEffect(QtWidgets.QGraphicsDropShadowEffect(blurRadius=25, xOffset=0, yOffset=0))
         self.menuBar.setGraphicsEffect(QtWidgets.QGraphicsDropShadowEffect(blurRadius=25, xOffset=0, yOffset=0))
@@ -202,13 +219,6 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.cartPageClickButton()
         self.orderPageClickButton()
         self.stackedWidget.setCurrentWidget(self.hotelpage)
-
-    def getPayInforMation(self):
-        data = json.loads(recvMsg(s))
-        sendMsg(s, "ok")
-        self.user2.setText(data[0])
-        self.room2.setText(str(data[1]))
-        self.price72.setText(str(data[2]))
 
     def getOrderInformation(self, index):
         sendMsg(s, str(index))
@@ -230,10 +240,16 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         checkout = datetime.strptime(orderData['checkout'], '%Y-%m-%d').date()
         self.checkin22.setDate(checkin)
         self.dateEdit_4.setDate(checkout)
-        image = str(random.randint(1, 9)) + ".jpg"
-        self.imageroom4.setPixmap(QtGui.QPixmap(image))
         if orderData['Note'] != "None":
             self.note22.setText(orderData['Note'])
+        image = json.loads(recvMsg(s))
+        sendMsg(s, "ok")
+        page = json.loads(recvMsg(s))
+        sendMsg(s, "ok")
+        self.imagetmp1.setPixmap(QtGui.QPixmap(image[0]))
+        self.imageroom4.setPixmap(QtGui.QPixmap(image[1]))
+        self.cartindexnow = int(page[0]) - 1
+        self.pageCount1.setText(page[0] + '/' + page[1])
 
     def getCartInformation(self, index):
         sendMsg(s, str(index))
@@ -253,10 +269,16 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         checkout = datetime.strptime(orderData['checkout'], '%Y-%m-%d').date()
         self.dateEdit11_2.setDate(checkin)
         self.dateEdit_3.setDate(checkout)
-        image = str(random.randint(1, 9)) + ".jpg"
-        self.imageroom5.setPixmap(QtGui.QPixmap(image))
         if orderData['Note'] != "None":
             self.noteinput_2.setText(orderData['Note'])
+        image = json.loads(recvMsg(s))
+        sendMsg(s, "ok")
+        page = json.loads(recvMsg(s))
+        sendMsg(s, "ok")
+        self.imagetmp1.setPixmap(QtGui.QPixmap(image[0]))
+        self.imageroom5.setPixmap(QtGui.QPixmap(image[1]))
+        self.cartindexnow = int(page[0]) - 1
+        self.pageCount2.setText(page[0] + '/' + page[1])
 
     def getBookingInformation(self, roomType):
         roomData = json.loads(recvMsg(s))
@@ -268,11 +290,15 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.price42.setText(roomData['price'])
         self.imageroom.setPixmap(QtGui.QPixmap(roomData['image']))
 
-    def getHotelInformation(self):
+    def getHotelInformation(self, index):
+        sendMsg(s, str(index))
+        recvMsg(s)
         hotelData = json.loads(recvMsg(s))
         sendMsg(s, "ok")
 
         self.hotelname1.setText(hotelData['name'])
+        self.imagetmp1.setPixmap(QtGui.QPixmap(hotelData['image']))
+
         single = hotelData['rooms']['single']
         self.des12.setText(single['description'])
         self.price12.setText(single['price'])
@@ -291,9 +317,15 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.empty32.setText(family['empty'])
         self.roomimage3.setPixmap(QtGui.QPixmap(hotelData['rooms']['family']['image']))
 
+        page = json.loads(recvMsg(s))
+        sendMsg(s, "ok")
+        self.hotelindexnow = int(page[0]) - 1
+        self.pageCount3.setText(page[0] + '/' + page[1])
+
     def getInfor(self):
         username = recvMsg(s)
         sendMsg(s, "ok")
+        self.imagetmp1.setScaledContents(True)
         self.imageroom.setScaledContents(True)
         self.imageroom5.setScaledContents(True)
         self.imageroom4.setScaledContents(True)
@@ -302,8 +334,9 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.roomimage3.setScaledContents(True)
         self.cartindexnow = 0
         self.orderindexnow = 0
+        self.hotelindexnow = 0
         self.usernameButton.setText(username)
-        self.getHotelInformation()
+        self.getHotelInformation(self.hotelindexnow)
 
     def showPopup(self, msg):
         QMessageBox.information(self, "Notification", msg)

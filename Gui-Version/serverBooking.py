@@ -2,6 +2,7 @@ from serverLib import *
 
 def idGenerator(name, type, serverData):
     id = 1
+    hotel = serverData[1]['hotels'][0]
     for i in serverData[1]['hotels']:
         if i['name'] == name:
             hotel = i
@@ -9,6 +10,7 @@ def idGenerator(name, type, serverData):
         id += 1
     id *= 100
 
+    room = hotel['rooms']['single']
     if type == 'single':
         room = hotel['rooms']['single']
         id += 10
@@ -35,11 +37,15 @@ def idGenerator(name, type, serverData):
     fid = str(id + idRoom)
     return fid
 
+def removeNotAvailableOrder(serverData, cartData):
+    hotelIndex = findHotelIndex(serverData, cartData['hotelname'])
+    hotelData = serverData[1]['hotels'][hotelIndex]
+    check = checkEmpty(hotelData, cartData['roomtype'], cartData['checkin'], cartData['checkout'])
+    return check
+
 def checkPayment(s, serverData, guest):
-    for i in serverData[0]['users']:
-        if i['username'] == guest:
-            userCartData = i['cart']
-            break
+    indexUser = getUserIndex(serverData, guest)
+    userCartData = serverData[0]['users'][indexUser]['cart']
     roomCount = len(userCartData)
     if roomCount == 0:
         sendMsg(s, "None")
@@ -48,51 +54,81 @@ def checkPayment(s, serverData, guest):
     sendMsg(s, "True")
     recvMsg(s)
 
+    checkRemove = "False"
+    indexCart = 0
     totalPrice = 0
     for i in userCartData:
-        totalPrice += int(i['price'])
-    sendMsg(s, json.dumps([guest, roomCount, totalPrice]))
+        check = removeNotAvailableOrder(serverData, i)
+        if not check:
+            checkRemove = "Some orders in the cart have been removed because there are no available rooms"
+            roomCount -= 1
+            del serverData[0]['users'][indexUser]['cart'][indexCart]
+        else:
+            indexCart += 1
+            totalPrice += int(i['price'])
+    saveUsersData(serverData[0])
+
+    sendMsg(s, json.dumps([guest, roomCount, totalPrice, checkRemove]))
     recvMsg(s)
     print("Checking complete!")
 
 def sendCartTolistBooked(serverData, guest):
-    userIndex = 0
-    for i in serverData[0]['users']:
-        if i['username'] == guest:
-            cartData = i['cart']
-            break
-        userIndex += 1
+    indexUser = getUserIndex(serverData, guest)
+    cartData = serverData[0]['users'][indexUser]['cart']
 
     timeBooked = str(datetime.now().replace(microsecond=0))
+    checkRemove = False
+    userData = serverData[0]
+    hotelData = serverData[1]
+    index = 0
     for i in cartData:
         id = idGenerator(i['hotelname'], i['roomtype'], serverData)
-
         order = ordered(id, i['hotelname'], i['roomtype'], i['price'],
                         i['checkin'], i['checkout'], timeBooked, i['Note'])
-        addingUserBooked(order, guest, serverData)
-    serverData[0]['users'][userIndex]['cart'].clear()
+        check = addingUserBooked(userData, hotelData, order, guest)
+        if check[0] == False:
+            checkRemove = True
+            del serverData[0]['users'][indexUser]['cart'][index]
+        else:
+            userData = check[0]
+            hotelData = check[1]
+            index += 1
+        del userData['users'][indexUser]['cart'][0]
+
+    if not checkRemove:
+        serverData[0] = userData
+        serverData[1] = hotelData
     saveUsersData(serverData[0])
+    saveHotelsData(serverData[1])
+    return checkRemove
 
 def goPayment(s, serverData, guest):
     cardID = recvMsg(s)
     sendMsg(s, "ok")
+
     check = cardIDChecking(serverData, cardID, guest)
     if not check:
         sendMsg(s, "Wrong Card ID!")
         recvMsg(s)
         return
 
-    sendCartTolistBooked(serverData, guest)
-    sendMsg(s, "Payment complete!")
-    recvMsg(s)
+    check = sendCartTolistBooked(serverData, guest)
+    if not check:
+        sendMsg(s, "Payment complete!")
+        recvMsg(s)
+    else:
+        sendMsg(s, "Some orders in the cart have been removed because there are no available rooms")
+        recvMsg(s)
 
 def deleteOrderedRoom(s, serverData, guest):
     index = int(recvMsg(s))
     sendMsg(s, "ok")
+    indexGuest = 0
     for i in serverData[0]['users']:
         if i['username'] == guest:
-            userOrderedData = i['listBooked']
             break
+        indexGuest += 1
+    userOrderedData = serverData[0]['users'][indexGuest]['listBooked']
     if len(userOrderedData) == 0:
         sendMsg(s, "None")
         recvMsg(s)
@@ -113,6 +149,7 @@ def deleteOrderedRoom(s, serverData, guest):
     recvMsg(s)
 
     idRoom = userOrderedData[index]['id']
+    roomType = 'single'
     if idRoom[1] == '1':
         roomType = 'single'
     elif idRoom[1] == '2':
@@ -135,10 +172,8 @@ def deleteOrderedRoom(s, serverData, guest):
 def deleteCartRoom(s, serverData, guest):
     index = int(recvMsg(s))
     sendMsg(s, "ok")
-    for i in serverData[0]['users']:
-        if i['username'] == guest:
-            userCartData = i['cart']
-            break
+    indexUser = getUserIndex(serverData, guest)
+    userCartData = serverData[0]['users'][indexUser]['cart']
     if len(userCartData) == 0:
         sendMsg(s, "None")
         recvMsg(s)
@@ -155,10 +190,9 @@ def deleteCartRoom(s, serverData, guest):
 def showOrdered(s, serverData, guest):
     index = int(recvMsg(s))
     sendMsg(s, "ok")
-    for i in serverData[0]['users']:
-        if i['username'] == guest:
-            userOrderData = i['listBooked']
-            break
+    indexUser = getUserIndex(serverData, guest)
+    userOrderData = serverData[0]['users'][indexUser]['listBooked']
+
     if len(userOrderData) == 0:
         sendMsg(s, json.dumps("None"))
         recvMsg(s)
@@ -169,14 +203,19 @@ def showOrdered(s, serverData, guest):
     OrderData = json.dumps(userOrderData[index])
     sendMsg(s, OrderData)
     recvMsg(s)
+    hotelIndex = findHotelIndex(serverData, userOrderData[index]['hotelname'])
+    hotelImage = serverData[1]['hotels'][hotelIndex]['image']
+    roomImage = serverData[1]['hotels'][hotelIndex]['rooms'][userOrderData[index]['roomtype']]['image']
+    sendMsg(s, json.dumps([hotelImage, roomImage]))
+    recvMsg(s)
+    sendMsg(s, json.dumps([str(index + 1), str(len(userOrderData))]))
+    recvMsg(s)
 
 def editCart(s, serverData, guest):
     index = int(recvMsg(s))
     sendMsg(s, "ok")
-    for i in serverData[0]['users']:
-        if i['username'] == guest:
-            userCartData = i['cart']
-            break
+    indexUser = getUserIndex(serverData, guest)
+    userCartData = serverData[0]['users'][indexUser]['cart']
     if len(userCartData) == 0:
         sendMsg(s, "False")
         recvMsg(s)
@@ -196,10 +235,8 @@ def editCart(s, serverData, guest):
 def showCart(s, serverData, guest):
     index = int(recvMsg(s))
     sendMsg(s, "ok")
-    for i in serverData[0]['users']:
-        if i['username'] == guest:
-            userCartData = i['cart']
-            break
+    indexUser = getUserIndex(serverData, guest)
+    userCartData = serverData[0]['users'][indexUser]['cart']
     if len(userCartData) == 0:
         sendMsg(s, json.dumps("None"))
         recvMsg(s)
@@ -209,6 +246,13 @@ def showCart(s, serverData, guest):
     index = index % len(userCartData)
     cartData = json.dumps(userCartData[index])
     sendMsg(s, cartData)
+    recvMsg(s)
+    hotelIndex = findHotelIndex(serverData, userCartData[index]['hotelname'])
+    hotelImage = serverData[1]['hotels'][hotelIndex]['image']
+    roomImage = serverData[1]['hotels'][hotelIndex]['rooms'][userCartData[index]['roomtype']]['image']
+    sendMsg(s, json.dumps([hotelImage, roomImage]))
+    recvMsg(s)
+    sendMsg(s, json.dumps([str(index + 1), str(len(userCartData))]))
     recvMsg(s)
 
 def findHotelIndex(serverData, hotelName):

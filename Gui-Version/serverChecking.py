@@ -1,3 +1,5 @@
+import json
+
 from serverLib import *
 
 def checkValidUsername(username):
@@ -58,10 +60,50 @@ def checkExistHotel(serverData, hotelName):
     return False
 
 def sendHotelsInfo(s, serverData, index):
-    hotel = json.dumps(serverData[1]['hotels'][index])
-    sendMsg(s, hotel)
+    sendMsg(s, json.dumps(serverData[1]['hotels'][index]))
+    recvMsg(s)
+    sendMsg(s, json.dumps([str(index + 1), str(len(serverData[1]['hotels']))]))
     recvMsg(s)
     print(f"Sending hotels information for client {s.getpeername()} complete!")
+
+def showNextHotel(s, serverData):
+    index = int(recvMsg(s))
+    sendMsg(s, "ok")
+    while index < 0:
+        index += len(serverData[1]['hotels'])
+    index = index % len(serverData[1]['hotels'])
+    sendHotelsInfo(s, serverData, index)
+
+def findHotel(s, serverData):
+    print(f"Listening hotel's request from client {s.getpeername()}...")
+    data = json.loads(recvMsg(s))
+    sendMsg(s, "ok")
+    searchHotel = data[0]
+    dateArrive = data[1]
+    dateLeft = data[2]
+    showRecvData(searchHotel, dateArrive, dateLeft)
+
+    exitsHotel = checkExistHotel(serverData, searchHotel)
+    if not exitsHotel:
+        print("Hotel not exits!")
+        sendMsg(s, "Hotel does not exits!")
+        recvMsg(s)
+        return
+    print("Valid hotels")
+    hotelIndex = findHotelIndex(serverData, searchHotel)
+    sendMsg(s, str(hotelIndex))
+    recvMsg(s)
+    recvMsg(s)
+    sendMsg(s, "ok")
+
+    sendHotelsInfo(s, serverData, hotelIndex)
+    if (checkEmpty(serverData[1]['hotels'][hotelIndex], "single", dateArrive, dateLeft)
+        and checkEmpty(serverData[1]['hotels'][hotelIndex], "couple", dateArrive, dateLeft)
+        and checkEmpty(serverData[1]['hotels'][hotelIndex], "family", dateArrive, dateLeft)):
+        sendMsg(s, "True")
+    else:
+        sendMsg("There are no available room now!")
+    recvMsg(s)
 
 def checkLogin(s, serverData):
     print(f"Checking login of client {s.getpeername()}...")
@@ -75,27 +117,11 @@ def checkLogin(s, serverData):
             recvMsg(s)
             sendMsg(s, accountData[0])
             recvMsg(s)
-            sendHotelsInfo(s, serverData, 0)
+            showNextHotel(s, serverData)
             print("Checking complete!")
             return accountData[0]
     sendMsg(s, "Wrong username or password!")
     print("Checking complete!")
-
-def checkEmpty(hotelData, roomType, dateArrive, dateLeft):
-    empty = False
-    dateArrive = datetime.strptime(dateArrive, '%Y-%m-%d').date()
-    dateLeft = datetime.strptime(dateLeft, '%Y-%m-%d').date()
-    haveBooked = False
-    for i in hotelData['rooms'][roomType]['listBooked']:
-        haveBooked = True
-        dateBooked = datetime.strptime(i['checkin'], '%Y-%m-%d').date()
-        dateBookedLeft = datetime.strptime(i['checkout'], '%Y-%m-%d').date()
-        if(dateLeft < dateBooked or dateArrive > dateBookedLeft or int(i['rooms'][roomType]['empty']) > 0):
-            return True
-    if not empty and haveBooked:
-        return False
-    if not haveBooked:
-        return True
 
 def cardIDChecking(serverData, cardID, guest):
     for i in serverData[0]['users']:

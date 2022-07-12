@@ -490,6 +490,7 @@ class Ui_mainMenu(object):
 "border-bottom-left-radius: 20px;\n"
 "border-bottom-right-radius: 20px;")
         self.imagetmp2.setText("")
+        self.imagetmp2.setScaledContents(False)
         self.imagetmp2.setObjectName("imagetmp2")
         self.frame_5 = QtWidgets.QFrame(self.menuBar)
         self.frame_5.setGeometry(QtCore.QRect(10, 380, 181, 111))
@@ -724,12 +725,12 @@ class Ui_mainMenu(object):
         self.stackedWidget.setAutoFillBackground(False)
         self.stackedWidget.setObjectName("stackedWidget")
         self.hotelpage = QtWidgets.QWidget()
-        self.hotelpage.setStyleSheet("#prevButton, #nextButton, #hotelname1, #des11, #des21, #des31, #price11, #price21, #price31, #empty11, #empty21, #empty31, #bookicon1, #bookicon2, #bookicon3{\n"
+        self.hotelpage.setStyleSheet("#prevButton, #nextButton, #hotelname1, #des11, #des21, #des31, #price11, #price21, #price31, #empty11, #empty21, #empty31, #bookicon1, #bookicon2, #bookicon3, #pageCount3{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
 "    color:rgba(255, 255, 255, 210);\n"
 "    border-radius:26px;\n"
 "}\n"
-"#des11, #des21, #des31, #price11, #price21, #price31, #empty11, #empty21, #empty31{\n"
+"#des11, #des21, #des31, #price11, #price21, #price31, #empty11, #empty21, #empty31, #pageCount3{\n"
 "    border-radius:10px;\n"
 "    color:rgba(0, 0, 0, 210);\n"
 "}\n"
@@ -1159,6 +1160,13 @@ class Ui_mainMenu(object):
         self.roomimage3.setGeometry(QtCore.QRect(0, 20, 100, 100))
         self.roomimage3.setObjectName("roomimage3")
         self.verticalLayout.addWidget(self.familyRoom)
+        self.pageCount3 = QtWidgets.QLabel(self.hotelpage)
+        self.pageCount3.setGeometry(QtCore.QRect(485, 60, 61, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.pageCount3.setFont(font)
+        self.pageCount3.setAlignment(QtCore.Qt.AlignCenter)
+        self.pageCount3.setObjectName("pageCount3")
         self.stackedWidget.addWidget(self.hotelpage)
         self.bookingpage = QtWidgets.QWidget()
         self.bookingpage.setStyleSheet("#backButton1, #acceptButton, #hotelname2, #type1, #des41, #price41, #checkin11, #checkout11, #note11{\n"
@@ -1472,12 +1480,12 @@ class Ui_mainMenu(object):
         self.noteinput.setObjectName("noteinput")
         self.stackedWidget.addWidget(self.bookingpage)
         self.cartpage = QtWidgets.QWidget()
-        self.cartpage.setStyleSheet("#prevButton3, #nextButton3, #payButton, #hotelname3, #carthotelname1, #type31, #des61, #price61, #checkin31, #checkout31, #note21, #cancelButton_2, #editButton{\n"
+        self.cartpage.setStyleSheet("#prevButton3, #nextButton3, #payButton, #hotelname3, #carthotelname1, #type31, #des61, #price61, #checkin31, #checkout31, #note21, #cancelButton_2, #editButton, #pageCount2{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
 "    color:rgba(255, 255, 255, 210);\n"
 "    border-radius:25px;\n"
 "}\n"
-"#carthotelname1, #type31, #des61, #price61, #checkin31, #checkout31, #note21{\n"
+"#carthotelname1, #type31, #des61, #price61, #checkin31, #checkout31, #note21, #pageCount2{\n"
 "    border-radius:10px;\n"
 "    color:rgba(0, 0, 0, 210);\n"
 "}\n"
@@ -1911,6 +1919,13 @@ class Ui_mainMenu(object):
         self.editButton.setIcon(icon10)
         self.editButton.setIconSize(QtCore.QSize(40, 40))
         self.editButton.setObjectName("editButton")
+        self.pageCount2 = QtWidgets.QLabel(self.cartpage)
+        self.pageCount2.setGeometry(QtCore.QRect(485, 60, 61, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.pageCount2.setFont(font)
+        self.pageCount2.setAlignment(QtCore.Qt.AlignCenter)
+        self.pageCount2.setObjectName("pageCount2")
         self.stackedWidget.addWidget(self.cartpage)
         self.paymentpage = QtWidgets.QWidget()
         self.paymentpage.setStyleSheet("#paylabel, #payButton2, #user1, #room1, #price71, #cardlabel{\n"
@@ -2076,12 +2091,12 @@ class Ui_mainMenu(object):
         self.inputcardID.setObjectName("inputcardID")
         self.stackedWidget.addWidget(self.paymentpage)
         self.cancelpage = QtWidgets.QWidget()
-        self.cancelpage.setStyleSheet("#prevButton2, #nextButton2, #cancelButton, #preordered, #prehotelname1, #type21, #des51, #price51, #checkin21, #checkout21, #note11_2{\n"
+        self.cancelpage.setStyleSheet("#prevButton2, #nextButton2, #cancelButton, #preordered, #prehotelname1, #type21, #des51, #price51, #checkin21, #checkout21, #note11_2, #pageCount1{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
 "    color:rgba(255, 255, 255, 210);\n"
 "    border-radius:25px;\n"
 "}\n"
-"#prehotelname1, #type21, #des51, #price51, #checkin21, #checkout21, #note11_2{\n"
+"#prehotelname1, #type21, #des51, #price51, #checkin21, #checkout21, #note11_2, #pageCount1{\n"
 "    border-radius:10px;\n"
 "    color:rgba(0, 0, 0, 210);\n"
 "}\n"
@@ -2505,6 +2520,13 @@ class Ui_mainMenu(object):
         self.note22.setText("")
         self.note22.setReadOnly(True)
         self.note22.setObjectName("note22")
+        self.pageCount1 = QtWidgets.QLabel(self.cancelpage)
+        self.pageCount1.setGeometry(QtCore.QRect(485, 60, 61, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.pageCount1.setFont(font)
+        self.pageCount1.setAlignment(QtCore.Qt.AlignCenter)
+        self.pageCount1.setObjectName("pageCount1")
         self.stackedWidget.addWidget(self.cancelpage)
         mainMenu.setCentralWidget(self.centralwidget)
 
@@ -2572,6 +2594,7 @@ class Ui_mainMenu(object):
         self.price31.setText(_translate("mainMenu", " Price:"))
         self.des32.setText(_translate("mainMenu", "Description:"))
         self.roomimage3.setText(_translate("mainMenu", "TextLabel"))
+        self.pageCount3.setText(_translate("mainMenu", " 1 / 1"))
         self.backButton1.setText(_translate("mainMenu", "Back"))
         self.hotelname2.setText(_translate("mainMenu", "HOTEL NAME"))
         self.price42.setText(_translate("mainMenu", "Price:"))
@@ -2605,6 +2628,7 @@ class Ui_mainMenu(object):
         self.noteinput_2.setPlaceholderText(_translate("mainMenu", "Note for hotel"))
         self.cancelButton_2.setText(_translate("mainMenu", "Cancel"))
         self.editButton.setText(_translate("mainMenu", "Save"))
+        self.pageCount2.setText(_translate("mainMenu", " 1 / 1"))
         self.user1.setText(_translate("mainMenu", " User:"))
         self.payButton2.setText(_translate("mainMenu", "Payment"))
         self.paylabel.setText(_translate("mainMenu", "PAYMENT"))
@@ -2633,4 +2657,5 @@ class Ui_mainMenu(object):
         self.checkin22.setDisplayFormat(_translate("mainMenu", "dd/MM/yyyy"))
         self.dateEdit_4.setDisplayFormat(_translate("mainMenu", "dd/MM/yyyy"))
         self.note22.setPlaceholderText(_translate("mainMenu", "Note for hotel"))
+        self.pageCount1.setText(_translate("mainMenu", " 1 / 1"))
 import res_rc
