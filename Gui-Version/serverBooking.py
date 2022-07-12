@@ -162,7 +162,11 @@ def deleteOrderedRoom(s, serverData, guest):
         if i['id'] == idRoom:
             break
         indexRoom += 1
-    del listBooked[indexRoom]
+    del serverData[1]['hotels'][int(idRoom[0]) - 1]['rooms'][roomType]['listBooked'][indexRoom]
+    Empty = int(serverData[1]['hotels'][int(idRoom[0]) - 1]['rooms'][roomType]['empty']) + 1
+    Booked = int(serverData[1]['hotels'][int(idRoom[0]) - 1]['rooms'][roomType]['empty']) - 1
+    serverData[1]['hotels'][int(idRoom[0]) - 1]['rooms'][roomType]['empty'] = str(Empty)
+    serverData[1]['hotels'][int(idRoom[0]) - 1]['rooms'][roomType]['booked'] = str(Booked)
     saveHotelsData(serverData[1])
 
     del userOrderedData[index]

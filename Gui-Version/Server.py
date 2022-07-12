@@ -2,8 +2,6 @@ from serverLib import *
 IP = "127.0.0.1"
 PORT = 1234
 ADDR = (IP, PORT)
-FORMAT = "utf-8"
-SIZE = 1024
 
 def handleClient(conn, addr, serverData):
     print(f"[NEW CONNECTION] {addr} connected.")

@@ -108,8 +108,8 @@ def findHotel(s, serverData):
     recvMsg(s)
     recvMsg(s)
     sendMsg(s, "ok")
-
     sendHotelsInfo(s, serverData, hotelIndex)
+
     if (checkEmpty(serverData[1]['hotels'][hotelIndex], "single", dateArrive, dateLeft)
         and checkEmpty(serverData[1]['hotels'][hotelIndex], "couple", dateArrive, dateLeft)
         and checkEmpty(serverData[1]['hotels'][hotelIndex], "family", dateArrive, dateLeft)):

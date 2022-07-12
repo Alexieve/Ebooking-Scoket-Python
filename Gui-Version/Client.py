@@ -5,12 +5,10 @@ from clientLib import *
 IP = "127.0.0.1"
 PORT = 1234
 ADDR = (IP, PORT)
-FORMAT = "utf-8"
-SIZE = 1024
 
 class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
     def goHome(self):
-        # self.homePageShow(0)
+        self.homePageShow(0)
         self.stackedWidget.setCurrentWidget(self.hotelpage)
 
     def checkPay(self):
