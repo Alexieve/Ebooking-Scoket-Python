@@ -1,16 +1,16 @@
 {
     "hotels": [
         {
-            "image": "hotel1.jpg",
-            "name": "fivestar",
+            "image": "Malibu\\Logo.jpg",
+            "name": "MALIBU",
             "ID": "1",
             "rooms": {
                 "single": {
-                    "image": "1.jpg",
+                    "image": "Malibu\\Single.jpg",
                     "price": "500000",
                     "description": "Room for 1 person",
                     "empty": "1",
-                    "booked": "2",
+                    "booked": "-1",
                     "listBooked": [
                         {
                             "username": "nhann",
@@ -31,7 +31,7 @@
                     ]
                 },
                 "couple": {
-                    "image": "2.jpg",
+                    "image": "Malibu\\Couple.jpg",
                     "price": "800000",
                     "description": "Room for 2 people",
                     "empty": "2",
@@ -48,7 +48,7 @@
                     ]
                 },
                 "family": {
-                    "image": "3.jpg",
+                    "image": "Malibu\\Family.jpg",
                     "price": "1200000",
                     "description": "Room for 4 people",
                     "empty": "3",
@@ -58,12 +58,12 @@
             }
         },
         {
-            "image": "hotel2.jpg",
-            "name": "fourstar",
+            "image": "Pullman\\Logo.jpg",
+            "name": "PULLMAN",
             "ID": "2",
             "rooms": {
                 "single": {
-                    "image": "4.jpg",
+                    "image": "Pullman\\Single.jpg",
                     "price": "400000",
                     "description": "Room for 1 person",
                     "empty": "2",
@@ -80,7 +80,7 @@
                     ]
                 },
                 "couple": {
-                    "image": "5.jpg",
+                    "image": "Pullman\\Couple.jpg",
                     "price": "600000",
                     "description": "Room for 2 people",
                     "empty": "3",
@@ -88,7 +88,7 @@
                     "listBooked": []
                 },
                 "family": {
-                    "image": "6.jpg",
+                    "image": "Pullman\\Family.jpg",
                     "price": "800000",
                     "description": "Room for 4 people",
                     "empty": "3",
@@ -98,12 +98,12 @@
             }
         },
         {
-            "image": "hotel3.jpg",
-            "name": "threestar",
+            "image": "Sheraton\\Logo.jpg",
+            "name": "SHERATON",
             "ID": "3",
             "rooms": {
                 "single": {
-                    "image": "7.jpg",
+                    "image": "Sheraton\\Single.jpg",
                     "price": "300000",
                     "description": "Room for 1 person",
                     "empty": "4",
@@ -111,7 +111,7 @@
                     "listBooked": []
                 },
                 "couple": {
-                    "image": "8.jpg",
+                    "image": "Sheraton\\Couple.jpg",
                     "price": "400000",
                     "description": "Room for 2 people",
                     "empty": "5",
@@ -119,7 +119,7 @@
                     "listBooked": []
                 },
                 "family": {
-                    "image": "9.jpg",
+                    "image": "Sheraton\\Family.jpg",
                     "price": "500000",
                     "description": "Room for 4 people",
                     "empty": "3",

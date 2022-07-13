@@ -269,8 +269,8 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         sendMsg(s, "ok")
         page = json.loads(recvMsg(s))
         sendMsg(s, "ok")
-        self.imagetmp1.setPixmap(QtGui.QPixmap(image[0]))
-        self.imageroom4.setPixmap(QtGui.QPixmap(image[1]))
+        self.imagetmp1.setPixmap(QtGui.QPixmap("Image\\" + image[0]))
+        self.imageroom4.setPixmap(QtGui.QPixmap("Image\\" + image[1]))
         self.cartindexnow = int(page[0]) - 1
         self.pageCount1.setText(page[0] + '/' + page[1])
 
@@ -298,8 +298,8 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         sendMsg(s, "ok")
         page = json.loads(recvMsg(s))
         sendMsg(s, "ok")
-        self.imagetmp1.setPixmap(QtGui.QPixmap(image[0]))
-        self.imageroom5.setPixmap(QtGui.QPixmap(image[1]))
+        self.imagetmp1.setPixmap(QtGui.QPixmap("Image\\" + image[0]))
+        self.imageroom5.setPixmap(QtGui.QPixmap("Image\\" + image[1]))
         self.cartindexnow = int(page[0]) - 1
         self.pageCount2.setText(page[0] + '/' + page[1])
 
@@ -311,7 +311,7 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         self.type2.setText(roomType)
         self.des42.setText(roomData['description'])
         self.price42.setText(roomData['price'])
-        self.imageroom.setPixmap(QtGui.QPixmap(roomData['image']))
+        self.imageroom.setPixmap(QtGui.QPixmap("Image\\" + roomData['image']))
 
     def getHotelInformation(self, index):
         sendMsg(s, str(index))
@@ -320,25 +320,25 @@ class mainMenu(QtWidgets.QMainWindow, Ui_mainMenu):
         sendMsg(s, "ok")
 
         self.hotelname1.setText(hotelData['name'])
-        self.imagetmp1.setPixmap(QtGui.QPixmap(hotelData['image']))
+        self.imagetmp1.setPixmap(QtGui.QPixmap("Image\\" + hotelData['image']))
 
         single = hotelData['rooms']['single']
         self.des12.setText(single['description'])
         self.price12.setText(single['price'])
         self.empty11_2.setText(single['empty'])
-        self.roomimage1.setPixmap(QtGui.QPixmap(hotelData['rooms']['single']['image']))
+        self.roomimage1.setPixmap(QtGui.QPixmap("Image\\" + hotelData['rooms']['single']['image']))
 
         couple = hotelData['rooms']['couple']
         self.des22.setText(couple['description'])
         self.price22.setText(couple['price'])
         self.empty22.setText(couple['empty'])
-        self.roomimage2.setPixmap(QtGui.QPixmap(hotelData['rooms']['couple']['image']))
+        self.roomimage2.setPixmap(QtGui.QPixmap("Image\\" + hotelData['rooms']['couple']['image']))
 
         family = hotelData['rooms']['family']
         self.des32.setText(family['description'])
         self.price32.setText(family['price'])
         self.empty32.setText(family['empty'])
-        self.roomimage3.setPixmap(QtGui.QPixmap(hotelData['rooms']['family']['image']))
+        self.roomimage3.setPixmap(QtGui.QPixmap("Image\\" + hotelData['rooms']['family']['image']))
 
         page = json.loads(recvMsg(s))
         sendMsg(s, "ok")

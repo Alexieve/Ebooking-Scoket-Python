@@ -7,7 +7,7 @@
             "listBooked": [
                 {
                     "id": "121",
-                    "hotelname": "fivestar",
+                    "hotelname": "MALIBU",
                     "roomtype": "couple",
                     "price": "800000",
                     "checkin": "2022-07-01",
@@ -17,7 +17,7 @@
                 },
                 {
                     "id": "112",
-                    "hotelname": "fivestar",
+                    "hotelname": "MALIBU",
                     "roomtype": "single",
                     "price": "500000",
                     "checkin": "2022-10-10",
@@ -28,28 +28,12 @@
             ],
             "cart": [
                 {
-                    "hotelname": "fourstar",
+                    "hotelname": "PULLMAN",
                     "roomtype": "single",
                     "price": "400000",
-                    "checkin": "2022-07-01",
-                    "checkout": "2022-07-07",
-                    "Note": "Need a parking lot for cars"
-                },
-                {
-                    "hotelname": "fourstar",
-                    "roomtype": "couple",
-                    "price": "600000",
-                    "checkin": "2022-07-01",
-                    "checkout": "2022-07-07",
-                    "Note": "Need a parking lot for cars"
-                },
-                {
-                    "hotelname": "fourstar",
-                    "roomtype": "family",
-                    "price": "800000",
-                    "checkin": "2022-07-01",
-                    "checkout": "2022-07-07",
-                    "Note": "Need a parking lot for cars"
+                    "checkin": "2022-07-11",
+                    "checkout": "2022-07-12",
+                    "Note": ""
                 }
             ]
         },
@@ -60,7 +44,7 @@
             "listBooked": [
                 {
                     "id": "111",
-                    "hotelname": "fivestar",
+                    "hotelname": "MALIBU",
                     "roomtype": "single",
                     "price": "500000",
                     "checkin": "2022-07-01",
@@ -71,7 +55,7 @@
             ],
             "cart": [
                 {
-                    "hotelname": "fourstar",
+                    "hotelname": "PULLMAN",
                     "roomtype": "couple",
                     "price": "600000",
                     "checkin": "2022-07-01",
@@ -79,7 +63,7 @@
                     "Note": "Need a parking lot for cars"
                 },
                 {
-                    "hotelname": "fourstar",
+                    "hotelname": "PULLMAN",
                     "roomtype": "family",
                     "price": "800000",
                     "checkin": "2022-07-01",
@@ -95,7 +79,7 @@
             "listBooked": [
                 {
                     "id": "211",
-                    "hotelname": "fourstar",
+                    "hotelname": "PULLMAN",
                     "roomtype": "single",
                     "price": "400000",
                     "checkin": "2022-07-01",
