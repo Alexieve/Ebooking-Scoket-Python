@@ -1,0 +1,140 @@
+{
+    "hotels": [
+        {
+            "image": "Malibu\\Logo.jpg",
+            "name": "MALIBU",
+            "ID": "1",
+            "rooms": {
+                "single": {
+                    "image": "Malibu\\Single.jpg",
+                    "price": "500000",
+                    "description": "Room for 1 person",
+                    "empty": "0",
+                    "booked": "0",
+                    "listBooked": [
+                        {
+                            "username": "nhann",
+                            "id": "111",
+                            "checkin": "2022-07-01",
+                            "checkout": "2022-07-07",
+                            "timeBooked": "00:00:00",
+                            "Note": "Wine is included"
+                        },
+                        {
+                            "username": "quynh",
+                            "id": "112",
+                            "checkin": "2022-10-10",
+                            "checkout": "2022-11-11",
+                            "timeBooked": "00:00:00",
+                            "Note": "abcxyz"
+                        },
+                        {
+                            "username": "quynh",
+                            "id": "113",
+                            "checkin": "2022-07-14",
+                            "checkout": "2022-07-14",
+                            "timeBooked": "2022-07-14 09:45:55",
+                            "Note": "None"
+                        }
+                    ]
+                },
+                "couple": {
+                    "image": "Malibu\\Couple.jpg",
+                    "price": "800000",
+                    "description": "Room for 2 people",
+                    "empty": "2",
+                    "booked": "1",
+                    "listBooked": [
+                        {
+                            "username": "quynh",
+                            "id": "121",
+                            "checkin": "2022-07-01",
+                            "checkout": "2022-07-07",
+                            "timeBooked": "00:00:00",
+                            "Note": "Asked a permission play guitar at night"
+                        }
+                    ]
+                },
+                "family": {
+                    "image": "Malibu\\Family.jpg",
+                    "price": "1200000",
+                    "description": "Room for 4 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                }
+            }
+        },
+        {
+            "image": "Pullman\\Logo.jpg",
+            "name": "PULLMAN",
+            "ID": "2",
+            "rooms": {
+                "single": {
+                    "image": "Pullman\\Single.jpg",
+                    "price": "400000",
+                    "description": "Room for 1 person",
+                    "empty": "2",
+                    "booked": "1",
+                    "listBooked": [
+                        {
+                            "username": "tinnn",
+                            "id": "211",
+                            "checkin": "2022-07-01",
+                            "checkout": "2022-07-07",
+                            "timeBooked": "00:00:00",
+                            "Note": "Need a parking lot for cars"
+                        }
+                    ]
+                },
+                "couple": {
+                    "image": "Pullman\\Couple.jpg",
+                    "price": "600000",
+                    "description": "Room for 2 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                },
+                "family": {
+                    "image": "Pullman\\Family.jpg",
+                    "price": "800000",
+                    "description": "Room for 4 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                }
+            }
+        },
+        {
+            "image": "Sheraton\\Logo.jpg",
+            "name": "SHERATON",
+            "ID": "3",
+            "rooms": {
+                "single": {
+                    "image": "Sheraton\\Single.jpg",
+                    "price": "300000",
+                    "description": "Room for 1 person",
+                    "empty": "4",
+                    "booked": "0",
+                    "listBooked": []
+                },
+                "couple": {
+                    "image": "Sheraton\\Couple.jpg",
+                    "price": "400000",
+                    "description": "Room for 2 people",
+                    "empty": "5",
+                    "booked": "0",
+                    "listBooked": []
+                },
+                "family": {
+                    "image": "Sheraton\\Family.jpg",
+                    "price": "500000",
+                    "description": "Room for 4 people",
+                    "empty": "3",
+                    "booked": "0",
+                    "listBooked": []
+                }
+            }
+        }
+    ]
+}
