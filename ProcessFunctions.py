@@ -1,6 +1,6 @@
 import os
 FORMAT = "utf-8"
-SIZE = 1024
+SIZE = 8192
 
 def cls():
     os.system('cls')
